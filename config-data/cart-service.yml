@@ -4,11 +4,11 @@ server:
 spring:
   application:
     name: cart-service
-    datasource:
-      url: jdbc:mysql://mysql-db:3306/cart-service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      username: ${MYSQL_USER}
-      password: ${MYSQL_PASSWORD}
+  datasource:
+    url: jdbc:mysql://mysql-db:3306/cart-service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
