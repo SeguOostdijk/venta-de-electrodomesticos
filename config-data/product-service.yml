@@ -1,0 +1,8 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: product-service
+  datasource:
+    url: jdbc:mysql://mysql-db:3306/ecommerce?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC

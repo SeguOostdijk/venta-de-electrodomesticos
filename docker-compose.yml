@@ -1,0 +1,86 @@
+
+services:
+
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - homeappliance-commerce-net
+
+  eureka-sv:
+    build: eureka-sv/eureka-sv
+    container_name: eureka-sv
+    ports:
+      - "8761:8761"
+    networks:
+      - homeappliance-commerce-net
+
+  config-server:
+    build: config-server
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    depends_on:
+      - eureka-sv
+    networks:
+      - homeappliance-commerce-net
+
+  product-service:
+    build: product-service
+    container_name: product-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql-db
+      - eureka-sv
+      - config-server
+    networks:
+      - homeappliance-commerce-net
+
+  cart-service:
+    build: cart-service
+    container_name: cart-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mysql-db
+      - eureka-sv
+      - config-server
+    networks:
+      - homeappliance-commerce-net
+
+  sale-service:
+    build: sale-service
+    container_name: sale-service
+    ports:
+      - "8081:8083"
+    depends_on:
+      - mysql-db
+      - eureka-sv
+      - config-server
+    networks:
+      - homeappliance-commerce-net
+
+  api-gateway:
+    build: api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-sv
+      - config-server
+    networks:
+      - homeappliance-commerce-net
+
+networks:
+  homeappliance-commerce-net:
+    driver: bridge
+
+volumes:
+  mysql_data:
