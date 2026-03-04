@@ -5,4 +5,8 @@ spring:
   application:
     name: cart-service
   datasource:
-    url: jdbc:mysql://mysql-db:3306/ecommerce?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    url: jdbc:mysql://mysql-db:3306/cart-service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-sv:8761/eureka/
