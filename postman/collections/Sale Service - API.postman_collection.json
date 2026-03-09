@@ -1,0 +1,652 @@
+{
+  "info": {
+    "_postman_id": "63b5a718-c5a0-4c3a-8517-11d3e78fb5a5",
+    "name": "Sale Service - API",
+    "description": "Colección de Postman para probar el microservicio de ventas",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Crear Nueva Venta",
+      "id": "a9f721c5-7615-42dc-8353-40493c67701e",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{gateway_url}}/sale-service/sales/{{cartId}}",
+          "host": [
+            "{{gateway_url}}"
+          ],
+          "path": [
+            "sale-service",
+            "sales",
+            "{{cartId}}"
+          ]
+        },
+        "description": "Crear una nueva venta asociada a un carrito existente.\n\n**Parámetros:**\n- cartId: ID del carrito (debe existir en el servicio de carritos)\n\n**Respuesta:**\n- 201 Created: Venta creada exitosamente\n- 404 Not Found: Carrito no encontrado\n- 503 Service Unavailable: Servicio de carritos no disponible"
+      },
+      "response": [
+        {
+          "id": "51fa2d9d-b909-4190-9788-d35781c09b0c",
+          "name": "Crear Nueva Venta",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/sale-service/sales/{{cartId}}",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "sale-service",
+                "sales",
+                "{{cartId}}"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 05 Mar 2026 13:19:42 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 4,\n    \"date\": \"2026-03-05\",\n    \"totalPrice\": 799.99,\n    \"products\": [\n        {\n            \"id\": 1,\n            \"name\": \"Refrigerador Samsung - Actualizado\",\n            \"brand\": \"Samsung\",\n            \"price\": 799.99,\n            \"quantity\": 1\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Obtener Todas las Ventas",
+      "id": "68d2b911-9977-444a-9c0a-c2cb058966b9",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{gateway_url}}/sale-service/sales",
+          "host": [
+            "{{gateway_url}}"
+          ],
+          "path": [
+            "sale-service",
+            "sales"
+          ]
+        },
+        "description": "Obtiene la lista de todas las ventas registradas en el sistema.\n\n**Respuesta:**\n- 200 OK: Lista de ventas"
+      },
+      "response": [
+        {
+          "id": "b4dbfd8f-9519-4ab8-b088-42a400c62642",
+          "name": "Obtener Todas las Ventas",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/sale-service/sales",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "sale-service",
+                "sales"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 05 Mar 2026 13:20:28 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 4,\n        \"date\": \"2026-03-05\",\n        \"totalPrice\": 799.99,\n        \"products\": [\n            {\n                \"id\": 1,\n                \"name\": \"Refrigerador Samsung - Actualizado\",\n                \"brand\": \"Samsung\",\n                \"price\": 799.99,\n                \"quantity\": 1\n            }\n        ]\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Obtener Venta por ID",
+      "id": "362bc48b-5c50-4064-9fa7-c53e74a96307",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{gateway_url}}/sale-service/sales/{{saleId}}",
+          "host": [
+            "{{gateway_url}}"
+          ],
+          "path": [
+            "sale-service",
+            "sales",
+            "{{saleId}}"
+          ]
+        },
+        "description": "Obtiene los detalles de una venta específica por su ID.\n\n**Parámetros:**\n- saleId: ID de la venta a obtener\n\n**Respuesta:**\n- 200 OK: Detalles de la venta\n- 404 Not Found: Venta no encontrada"
+      },
+      "response": [
+        {
+          "id": "8ae32856-c692-44fc-8747-c6713247cd96",
+          "name": "Obtener Venta por ID",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/sale-service/sales/{{saleId}}",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "sale-service",
+                "sales",
+                "{{saleId}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 05 Mar 2026 13:20:47 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 4,\n    \"date\": \"2026-03-05\",\n    \"totalPrice\": 799.99,\n    \"products\": [\n        {\n            \"id\": 1,\n            \"name\": \"Refrigerador Samsung - Actualizado\",\n            \"brand\": \"Samsung\",\n            \"price\": 799.99,\n            \"quantity\": 1\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Obtener Ventas por Fecha",
+      "id": "f6095678-11b6-400a-995c-db08c82dbe75",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{gateway_url}}/sale-service/sales/date/2026-03-05",
+          "host": [
+            "{{gateway_url}}"
+          ],
+          "path": [
+            "sale-service",
+            "sales",
+            "date",
+            "2026-03-05"
+          ]
+        },
+        "description": "Obtiene todas las ventas realizadas en una fecha específica.\n\n**Parámetros:**\n- date: Fecha en formato YYYY-MM-DD\n\n**Respuesta:**\n- 200 OK: Lista de ventas para esa fecha\n- 400 Bad Request: Formato de fecha inválido\n- 404 Not Found: No hay ventas para esa fecha"
+      },
+      "response": [
+        {
+          "id": "c0cc654b-7990-4488-b361-23490faba792",
+          "name": "Obtener Ventas por Fecha",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/sale-service/sales/date/2026-03-05",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "sale-service",
+                "sales",
+                "date",
+                "2026-03-05"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 05 Mar 2026 13:21:05 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 4,\n        \"date\": \"2026-03-05\",\n        \"totalPrice\": 799.99,\n        \"products\": [\n            {\n                \"id\": 1,\n                \"name\": \"Refrigerador Samsung - Actualizado\",\n                \"brand\": \"Samsung\",\n                \"price\": 799.99,\n                \"quantity\": 1\n            }\n        ]\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Eliminar Venta",
+      "id": "d04420f2-5fd0-4e0a-8f22-74afcc5d85c4",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{gateway_url}}/sale-service/sales/{{saleId}}",
+          "host": [
+            "{{gateway_url}}"
+          ],
+          "path": [
+            "sale-service",
+            "sales",
+            "{{saleId}}"
+          ]
+        },
+        "description": "Elimina una venta existente del sistema.\n\n**Parámetros:**\n- saleId: ID de la venta a eliminar\n\n**Respuesta:**\n- 204 No Content: Venta eliminada exitosamente\n- 404 Not Found: Venta no encontrada"
+      },
+      "response": [
+        {
+          "id": "ec786ed9-740c-47bb-a9b0-2b70bd05adcb",
+          "name": "Eliminar Venta",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_url}}/sale-service/sales/{{saleId}}",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "sale-service",
+                "sales",
+                "{{saleId}}"
+              ]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 05 Mar 2026 13:21:18 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": null
+        }
+      ]
+    },
+    {
+      "name": "ERROR: CartNotFoundException - Carrito No Existe",
+      "id": "c5f9a451-e8b7-4df2-b7f8-5aa9ca93f256",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{gateway_url}}/sale-service/sales/999",
+          "host": [
+            "{{gateway_url}}"
+          ],
+          "path": [
+            "sale-service",
+            "sales",
+            "999"
+          ]
+        },
+        "description": "Intenta crear una venta con un cartId que no existe.\n\n**Respuesta esperada:** 404 Not Found\n**Error:** CartNotFoundException\n**Mensaje:** 'Cart service error: Cart with ID 999 not found'\n\nEsta prueba valida que el servicio maneja correctamente cuando el carrito no existe en Cart Service."
+      },
+      "response": [
+        {
+          "id": "1a002697-b2d4-4cab-b945-4d02685312a0",
+          "name": "ERROR: CartNotFoundException - Carrito No Existe",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/sale-service/sales/999",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "sale-service",
+                "sales",
+                "999"
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 05 Mar 2026 13:11:47 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": 404,\n    \"message\": \"Cart not found with id: 999\",\n    \"error\": \"Cart Not Found\",\n    \"timestamp\": \"2026-03-05T13:11:47.189828838\",\n    \"path\": \"/sales/999\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "ERROR: SaleNotFoundException - Venta No Existe",
+      "id": "739a76fc-7216-4978-ad02-c334f7730617",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{gateway_url}}/sale-service/sales/999",
+          "host": [
+            "{{gateway_url}}"
+          ],
+          "path": [
+            "sale-service",
+            "sales",
+            "999"
+          ]
+        },
+        "description": "Intenta obtener una venta que no existe en la base de datos.\n\n**Respuesta esperada:** 404 Not Found\n**Error:** SaleNotFoundException\n**Mensaje:** 'Sale with ID 999 not found'\n\nEsta prueba valida que el servicio lanza la excepción correcta cuando la venta no existe."
+      },
+      "response": [
+        {
+          "id": "dfe92f11-5a72-4eaf-b033-e5f03fcab9da",
+          "name": "ERROR: SaleNotFoundException - Venta No Existe",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/sale-service/sales/999",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "sale-service",
+                "sales",
+                "999"
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 05 Mar 2026 13:12:36 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": 404,\n    \"message\": \"Sale with ID 999 not found\",\n    \"error\": \"Sale Not Found\",\n    \"timestamp\": \"2026-03-05T13:12:36.355856597\",\n    \"path\": \"/sales/999\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "ERROR: SaleNotFoundException - Sin Ventas en Fecha",
+      "id": "7e6dfb56-ca92-4efb-afe6-1d56da9ea8dc",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{gateway_url}}/sale-service/sales/date/2020-01-01",
+          "host": [
+            "{{gateway_url}}"
+          ],
+          "path": [
+            "sale-service",
+            "sales",
+            "date",
+            "2020-01-01"
+          ]
+        },
+        "description": "Intenta obtener ventas en una fecha donde no hay registros.\n\n**Respuesta esperada:** 404 Not Found\n**Error:** SaleNotFoundException\n**Mensaje:** 'No sales found for date: 2020-01-01'\n\nEsta prueba valida que el servicio lanza la excepción correcta cuando no hay ventas en la fecha consultada."
+      },
+      "response": [
+        {
+          "id": "1f860f70-f924-43d6-8b76-fa4c1b9df480",
+          "name": "ERROR: SaleNotFoundException - Sin Ventas en Fecha",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/sale-service/sales/date/2020-01-01",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "sale-service",
+                "sales",
+                "date",
+                "2020-01-01"
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 05 Mar 2026 13:12:53 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": 404,\n    \"message\": \"No sales found for date: 2020-01-01\",\n    \"error\": \"Sale Not Found\",\n    \"timestamp\": \"2026-03-05T13:12:53.265681317\",\n    \"path\": \"/sales/date/2020-01-01\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "ERROR: IllegalArgumentException - Formato de Fecha Inválido",
+      "id": "2e2c896e-7dab-472c-87f8-b4b6e2922de4",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{gateway_url}}/sale-service/sales/date/2024/03/04",
+          "host": [
+            "{{gateway_url}}"
+          ],
+          "path": [
+            "sale-service",
+            "sales",
+            "date",
+            "2024",
+            "03",
+            "04"
+          ]
+        },
+        "description": "Intenta obtener ventas usando un formato de fecha INCORRECTO.\n\n**Formato INCORRECTO:** 2024/03/04 (con barras)\n**Formato CORRECTO:** 2024-03-04 (con guiones)\n\n**Respuesta esperada:** 400 Bad Request\n**Error:** IllegalArgumentException\n**Mensaje:** Text '2024/03/04' could not be parsed at index 4\n\nEsta prueba valida que el servicio valida correctamente el formato de la fecha."
+      },
+      "response": [
+        {
+          "id": "cf6c8bc8-f45b-4085-9285-6623b14e2983",
+          "name": "ERROR: IllegalArgumentException - Formato de Fecha Inválido",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/sale-service/sales/date/2024.03.04",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "sale-service",
+                "sales",
+                "date",
+                "2024.03.04"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Disposition",
+              "value": "inline;filename=f.txt"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 05 Mar 2026 13:16:22 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": 400,\n    \"message\": \"Invalid date format. Please use YYYY-MM-DD format\",\n    \"error\": \"Invalid Argument\",\n    \"timestamp\": \"2026-03-05T13:16:22.18253157\",\n    \"path\": \"/sales/date/2024.03.04\"\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "id": "0f2efbb6-e626-4776-b7ce-27ff57f4f0ae",
+      "key": "gateway_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "id": "255bd436-06cc-48d5-a340-87d513e8b427",
+      "key": "cartId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "id": "b8953825-d7f3-489c-b21b-a0f475cf7b47",
+      "key": "saleId",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

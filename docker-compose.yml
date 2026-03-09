@@ -5,13 +5,20 @@ services:
     image: mysql:8.0
     container_name: mysql-db
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD: root123
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
     networks:
       - homeappliance-commerce-net
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -proot123 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+      start_period: 30s
 
   eureka-sv:
     build: eureka-sv/eureka-sv
@@ -20,6 +27,12 @@ services:
       - "8761:8761"
     networks:
       - homeappliance-commerce-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:8761/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+      start_period: 40s
 
   config-server:
     build: config-server
@@ -27,9 +40,16 @@ services:
     ports:
       - "8888:8888"
     depends_on:
-      - eureka-sv
+      eureka-sv:
+        condition: service_healthy
     networks:
       - homeappliance-commerce-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:8888/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+      start_period: 40s
 
   product-service:
     build: product-service
@@ -37,11 +57,21 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - mysql-db
-      - eureka-sv
-      - config-server
+      mysql-db:
+        condition: service_healthy
+      eureka-sv:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
     networks:
       - homeappliance-commerce-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:8081/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+      start_period: 50s
+    restart: on-failure
 
   cart-service:
     build: cart-service
@@ -49,23 +79,43 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      - mysql-db
-      - eureka-sv
-      - config-server
+      mysql-db:
+        condition: service_healthy
+      eureka-sv:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
     networks:
       - homeappliance-commerce-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:8082/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+      start_period: 50s
+    restart: on-failure
 
   sale-service:
     build: sale-service
     container_name: sale-service
     ports:
-      - "8081:8083"
+      - "8083:8083"
     depends_on:
-      - mysql-db
-      - eureka-sv
-      - config-server
+      mysql-db:
+        condition: service_healthy
+      eureka-sv:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
     networks:
       - homeappliance-commerce-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:8083/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+      start_period: 50s
+    restart: on-failure
 
   api-gateway:
     build: api-gateway
@@ -73,10 +123,19 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - eureka-sv
-      - config-server
+      eureka-sv:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
     networks:
       - homeappliance-commerce-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+      start_period: 50s
+    restart: on-failure
 
 networks:
   homeappliance-commerce-net:

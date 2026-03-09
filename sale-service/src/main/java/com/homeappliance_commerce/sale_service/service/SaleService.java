@@ -3,10 +3,12 @@ package com.homeappliance_commerce.sale_service.service;
 import com.homeappliance_commerce.sale_service.dto.CartDTO;
 import com.homeappliance_commerce.sale_service.exception.CartNotFoundException;
 import com.homeappliance_commerce.sale_service.exception.SaleNotFoundException;
+import com.homeappliance_commerce.sale_service.exception.ServiceUnavailableException;
 import com.homeappliance_commerce.sale_service.model.Sale;
 import com.homeappliance_commerce.sale_service.model.SaleProduct;
 import com.homeappliance_commerce.sale_service.repository.ICartApi;
 import com.homeappliance_commerce.sale_service.repository.ISaleRepository;
+import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,24 +56,11 @@ public class SaleService implements ISaleService {
     }
 
     public Sale createSaleFallback(Long cartId, Throwable t) {
-        // Buscar la causa raíz de la excepción
-        Throwable cause = t.getCause();
-        String errorMessage = t.getMessage();
-
-        // Si hay una causa, intentar obtener su mensaje
-        if (cause != null) {
-            String causeMessage = cause.getMessage();
-            if (causeMessage != null) {
-                errorMessage = causeMessage;
-            }
+        if (t instanceof FeignException.FeignClientException)
+        {
+            throw new CartNotFoundException("Cart with ID " + cartId + " not found");
         }
-
-        // Propagar como CartNotFoundException
-        if (errorMessage != null) {
-            throw new CartNotFoundException("Cart service error: " + errorMessage);
-        }
-
-        throw new CartNotFoundException("Cart service is unavailable. Please try again later.");
+        throw new ServiceUnavailableException("Cart service is unavailable. Please try again later.");
     }
 
     @Override

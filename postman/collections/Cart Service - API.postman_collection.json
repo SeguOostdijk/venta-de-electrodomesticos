@@ -1,0 +1,546 @@
+{
+  "info": {
+    "_postman_id": "1c00340d-1113-4a3f-a312-c38be674723f",
+    "name": "Cart Service - API",
+    "description": "Colección de Postman para probar el microservicio de carritos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Crear Carrito Vacío",
+      "id": "bc1bc33f-8280-451e-b531-386f891cda09",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{api_gateway_url}}/cart-service/carts",
+          "host": [
+            "{{api_gateway_url}}"
+          ],
+          "path": [
+            "cart-service",
+            "carts"
+          ]
+        },
+        "description": "Crea un nuevo carrito vacío. Se inicializa con una lista de productos vacía y totalPrice en 0."
+      },
+      "response": [
+        {
+          "id": "1876031c-4832-4479-b610-3805dbadfa43",
+          "name": "Crear Carrito Vacío",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{api_gateway_url}}/cart-service/carts",
+              "host": [
+                "{{api_gateway_url}}"
+              ],
+              "path": [
+                "cart-service",
+                "carts"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Mar 2026 20:38:59 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 1,\n    \"totalPrice\": 0,\n    \"products\": []\n}"
+        }
+      ]
+    },
+    {
+      "name": "Obtener Carrito por ID",
+      "id": "0670fd94-0bda-4e77-83d5-b5e53a2f25c3",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{api_gateway_url}}/cart-service/carts/{{cart_id}}",
+          "host": [
+            "{{api_gateway_url}}"
+          ],
+          "path": [
+            "cart-service",
+            "carts",
+            "{{cart_id}}"
+          ]
+        },
+        "description": "Obtiene los detalles de un carrito específico usando su ID"
+      },
+      "response": [
+        {
+          "id": "5e23f1a2-a0e3-47de-94b1-cb7f9e1aea7f",
+          "name": "Obtener Carrito por ID",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{api_gateway_url}}/cart-service/carts/{{cart_id}}",
+              "host": [
+                "{{api_gateway_url}}"
+              ],
+              "path": [
+                "cart-service",
+                "carts",
+                "{{cart_id}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Mar 2026 20:39:21 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 1,\n    \"totalPrice\": 0,\n    \"products\": []\n}"
+        }
+      ]
+    },
+    {
+      "name": "Agregar Producto al Carrito",
+      "id": "5c821387-9da7-4d90-a09f-a31ece395b14",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{api_gateway_url}}/cart-service/carts/{{cart_id}}/products?productId={{product_id}}&quantity=1",
+          "host": [
+            "{{api_gateway_url}}"
+          ],
+          "path": [
+            "cart-service",
+            "carts",
+            "{{cart_id}}",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "productId",
+              "value": "{{product_id}}"
+            },
+            {
+              "key": "quantity",
+              "value": "1"
+            }
+          ]
+        },
+        "description": "Agrega un producto al carrito. Consume el microservicio de productos para obtener los detalles del producto.\n\nParámetros:\n- cartId: ID del carrito (path parameter)\n- productId: ID del producto a agregar (query parameter)\n- quantity: Cantidad del producto (default: 1)"
+      },
+      "response": [
+        {
+          "id": "dc55d864-005a-478e-bd9b-52e6c10f7962",
+          "name": "Agregar Producto al Carrito",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{api_gateway_url}}/cart-service/carts/{{cart_id}}/products?productId={{product_id}}&quantity=1",
+              "host": [
+                "{{api_gateway_url}}"
+              ],
+              "path": [
+                "cart-service",
+                "carts",
+                "{{cart_id}}",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "productId",
+                  "value": "{{product_id}}"
+                },
+                {
+                  "key": "quantity",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 04 Mar 2026 20:58:57 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": null
+        }
+      ]
+    },
+    {
+      "name": "Agregar Producto con Cantidad Mayor",
+      "id": "bdd69816-dba8-4b37-b32b-1a02ec954d5a",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{api_gateway_url}}/cart-service/carts/{{cart_id}}/products?productId={{product_id}}&quantity=5",
+          "host": [
+            "{{api_gateway_url}}"
+          ],
+          "path": [
+            "cart-service",
+            "carts",
+            "{{cart_id}}",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "productId",
+              "value": "{{product_id}}"
+            },
+            {
+              "key": "quantity",
+              "value": "5"
+            }
+          ]
+        },
+        "description": "Agrega un producto al carrito con cantidad especificada (ejemplo: 5 unidades)"
+      },
+      "response": [
+        {
+          "id": "043a5ec4-f47f-46f1-83a3-8197690fb211",
+          "name": "Agregar Producto con Cantidad Mayor",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{api_gateway_url}}/cart-service/carts/{{cart_id}}/products?productId={{product_id}}&quantity=5",
+              "host": [
+                "{{api_gateway_url}}"
+              ],
+              "path": [
+                "cart-service",
+                "carts",
+                "{{cart_id}}",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "productId",
+                  "value": "{{product_id}}"
+                },
+                {
+                  "key": "quantity",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 04 Mar 2026 20:59:40 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": null
+        }
+      ]
+    },
+    {
+      "name": "Eliminar Producto del Carrito",
+      "id": "2fab6fca-fb5f-4feb-9450-85d0665abab0",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{api_gateway_url}}/cart-service/carts/{{cart_id}}/products/{{product_id}}",
+          "host": [
+            "{{api_gateway_url}}"
+          ],
+          "path": [
+            "cart-service",
+            "carts",
+            "{{cart_id}}",
+            "products",
+            "{{product_id}}"
+          ]
+        },
+        "description": "Elimina un producto específico del carrito usando su ID"
+      },
+      "response": [
+        {
+          "id": "39c229b4-70b5-42b7-8e36-5dc7e9655b50",
+          "name": "Eliminar Producto del Carrito",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{api_gateway_url}}/cart-service/carts/{{cart_id}}/products/{{product_id}}",
+              "host": [
+                "{{api_gateway_url}}"
+              ],
+              "path": [
+                "cart-service",
+                "carts",
+                "{{cart_id}}",
+                "products",
+                "{{product_id}}"
+              ]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 04 Mar 2026 20:59:58 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": null
+        }
+      ]
+    },
+    {
+      "name": "Limpiar Carrito",
+      "id": "0a6a7207-3eb1-466f-b8ca-7cbffb8bde34",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{api_gateway_url}}/cart-service/carts/{{cart_id}}/products",
+          "host": [
+            "{{api_gateway_url}}"
+          ],
+          "path": [
+            "cart-service",
+            "carts",
+            "{{cart_id}}",
+            "products"
+          ]
+        },
+        "description": "Limpia todos los productos del carrito, dejándolo vacío"
+      },
+      "response": [
+        {
+          "id": "a83178ec-38a3-4a0c-999c-3c2b405193fe",
+          "name": "Limpiar Carrito",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{api_gateway_url}}/cart-service/carts/{{cart_id}}/products",
+              "host": [
+                "{{api_gateway_url}}"
+              ],
+              "path": [
+                "cart-service",
+                "carts",
+                "{{cart_id}}",
+                "products"
+              ]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 04 Mar 2026 21:01:19 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": null
+        }
+      ]
+    },
+    {
+      "name": "ERROR: ProductNotFoundException - Agregar Producto inexistente al Carrito",
+      "id": "12f2b52b-c2c3-4c85-967f-eaeeed373687",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{api_gateway_url}}/cart-service/carts/{{cart_id}}/products?productId=8&quantity=1",
+          "host": [
+            "{{api_gateway_url}}"
+          ],
+          "path": [
+            "cart-service",
+            "carts",
+            "{{cart_id}}",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "productId",
+              "value": "8"
+            },
+            {
+              "key": "quantity",
+              "value": "1"
+            }
+          ]
+        },
+        "description": "Agrega un producto inexistente al carrito, devolviendo un mensaje de error, con el código 404"
+      },
+      "response": [
+        {
+          "id": "7a15e89a-cc8c-4307-8dbb-d6adb6f36c82",
+          "name": "Agregar Producto inexistente al Carrito",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{api_gateway_url}}/cart-service/carts/{{cart_id}}/products?productId=8&quantity=1",
+              "host": [
+                "{{api_gateway_url}}"
+              ],
+              "path": [
+                "cart-service",
+                "carts",
+                "{{cart_id}}",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "productId",
+                  "value": "8"
+                },
+                {
+                  "key": "quantity",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": "",
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 04 Mar 2026 21:52:10 GMT"
+            }
+          ],
+          "cookie": [
+            {
+              "expires": "Invalid Date",
+              "domain": "",
+              "path": ""
+            }
+          ],
+          "body": ""
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "id": "7086c750-9a86-449c-86e3-f5e1915dba6f",
+      "key": "api_gateway_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "id": "1b2dbcc9-e67a-4081-88af-06aa42f1c4fb",
+      "key": "cart_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "id": "d00569d7-9ca8-4fb1-a897-9f3adaa8bdc2",
+      "key": "product_id",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

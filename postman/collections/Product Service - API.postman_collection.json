@@ -1,0 +1,773 @@
+{
+  "info": {
+    "_postman_id": "fa65a114-1969-4f87-843c-5566c716bda0",
+    "name": "Product Service - API",
+    "description": "Colección de Postman para probar el microservicio de productos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Crear Producto",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "    var jsonData = pm.response.json();",
+              "    pm.environment.set(\"product_id\", jsonData.id);",
+              "    pm.test(\"Producto creado exitosamente\", function () {",
+              "        pm.response.to.have.status(201);",
+              "    });",
+              "}"
+            ],
+            "type": "text/javascript",
+            "id": "7c508715-579d-4aa1-9e29-f4b54d93f6ae"
+          }
+        }
+      ],
+      "id": "c23411ca-2571-4768-a26c-4174592b0672",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Refrigerador Samsung\",\n    \"brand\": \"Samsung\",\n    \"price\": 899.99\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/product-service/products",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "product-service",
+            "products"
+          ]
+        },
+        "description": "Crea un nuevo producto en el sistema"
+      },
+      "response": [
+        {
+          "id": "4f914eb7-6fd4-4898-98ce-073d0a5e74bf",
+          "name": "1. Crear Producto",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Refrigerador Samsung\",\n    \"brand\": \"Samsung\",\n    \"price\": 899.99\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/product-service/products",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "product-service",
+                "products"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Mar 2026 20:22:11 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 1,\n    \"name\": \"Refrigerador Samsung\",\n    \"brand\": \"Samsung\",\n    \"price\": 899.99\n}"
+        }
+      ]
+    },
+    {
+      "name": "Obtener Producto por ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Producto tiene las propiedades correctas\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('id');",
+              "    pm.expect(jsonData).to.have.property('name');",
+              "    pm.expect(jsonData).to.have.property('brand');",
+              "    pm.expect(jsonData).to.have.property('price');",
+              "});"
+            ],
+            "type": "text/javascript",
+            "id": "e9796bf9-6a53-4909-8591-61a9e42418b4"
+          }
+        }
+      ],
+      "id": "a3311af3-758e-41e9-9838-10aea15274ef",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/product-service/products/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "product-service",
+            "products",
+            "1"
+          ]
+        },
+        "description": "Obtiene un producto específico por su ID. Puedes cambiar el ID en la URL (ej: /products/2)"
+      },
+      "response": [
+        {
+          "id": "a8ce6fb8-a64c-496d-99b7-cffa8ec130e2",
+          "name": "4. Obtener Producto por ID",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/product-service/products/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "product-service",
+                "products",
+                "1"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Mar 2026 20:23:30 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 1,\n    \"name\": \"Refrigerador Samsung\",\n    \"brand\": \"Samsung\",\n    \"price\": 899.99\n}"
+        }
+      ]
+    },
+    {
+      "name": "Obtener Producto por ID - Con Variable",
+      "id": "4bc7104c-212c-4612-926f-8c35eeb06dfb",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/product-service/products/{{product_id}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "product-service",
+            "products",
+            "{{product_id}}"
+          ]
+        },
+        "description": "Obtiene el producto usando la variable de entorno product_id (se guarda automáticamente al crear un producto)"
+      },
+      "response": [
+        {
+          "id": "98a6e531-a938-4419-b430-f77ef723f98e",
+          "name": "5. Obtener Producto por ID - Con Variable",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/product-service/products/{{product_id}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "product-service",
+                "products",
+                "{{product_id}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Mar 2026 20:24:02 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 2,\n    \"name\": \"Refrigerador Samsung\",\n    \"brand\": \"Samsung\",\n    \"price\": 899.99\n}"
+        }
+      ]
+    },
+    {
+      "name": "Obtener Múltiples Productos por IDs",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Respuesta es un array\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.be.an('array');",
+              "});"
+            ],
+            "type": "text/javascript",
+            "id": "5206922b-2ef6-4092-a1fd-8e02514c72aa"
+          }
+        }
+      ],
+      "id": "aae106f3-15fb-4fa8-b230-227023449d38",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/product-service/products?ids=1&ids=2&ids=3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "product-service",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "ids",
+              "value": "1"
+            },
+            {
+              "key": "ids",
+              "value": "2"
+            },
+            {
+              "key": "ids",
+              "value": "3"
+            }
+          ]
+        },
+        "description": "Obtiene múltiples productos por sus IDs. Añade o quita parámetros 'ids' según necesites."
+      },
+      "response": [
+        {
+          "id": "6ca008e1-381d-4d32-8ffe-f42294a4fa58",
+          "name": "6. Obtener Múltiples Productos por IDs",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/product-service/products?ids=1&ids=3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "product-service",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "ids",
+                  "value": "1"
+                },
+                {
+                  "key": "ids",
+                  "value": "2",
+                  "disabled": true
+                },
+                {
+                  "key": "ids",
+                  "value": "3"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Mar 2026 20:24:42 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Refrigerador Samsung\",\n        \"brand\": \"Samsung\",\n        \"price\": 899.99\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Lavadora LG\",\n        \"brand\": \"LG\",\n        \"price\": 650\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Actualizar Producto",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Producto actualizado exitosamente\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "id": "5189e348-87f9-4be2-88d5-8830b0be7bd7"
+          }
+        }
+      ],
+      "id": "38ad5688-5903-4526-9292-94bbcabcd2a4",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Refrigerador Samsung - Actualizado\",\n    \"brand\": \"Samsung\",\n    \"price\": 799.99\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/product-service/products?id=1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "product-service",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "1"
+            }
+          ]
+        },
+        "description": "Actualiza un producto existente. Cambia el parámetro 'id' según el producto que quieras actualizar."
+      },
+      "response": [
+        {
+          "id": "e37b4df8-62ec-46c3-9040-71d57745465c",
+          "name": "7. Actualizar Producto",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Refrigerador Samsung - Actualizado\",\n    \"brand\": \"Samsung\",\n    \"price\": 799.99\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/product-service/products?id=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "product-service",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Mar 2026 20:25:05 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 1,\n    \"name\": \"Refrigerador Samsung - Actualizado\",\n    \"brand\": \"Samsung\",\n    \"price\": 799.99\n}"
+        }
+      ]
+    },
+    {
+      "name": "Actualizar Producto - Con Variable",
+      "id": "71e19382-3c01-420a-9e5f-4a72f474acef",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Producto Actualizado desde Variable\",\n    \"brand\": \"Marca Nueva\",\n    \"price\": 1299.99\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/product-service/products?id={{product_id}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "product-service",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{product_id}}"
+            }
+          ]
+        },
+        "description": "Actualiza el producto usando la variable de entorno product_id"
+      },
+      "response": [
+        {
+          "id": "c27f5629-cd85-421b-afd1-1004ebdbe81e",
+          "name": "8. Actualizar Producto - Con Variable",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Producto Actualizado desde Variable\",\n    \"brand\": \"Marca Nueva\",\n    \"price\": 1299.99\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/product-service/products?id={{product_id}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "product-service",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{product_id}}"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Mar 2026 20:25:31 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 2,\n    \"name\": \"Producto Actualizado desde Variable\",\n    \"brand\": \"Marca Nueva\",\n    \"price\": 1299.99\n}"
+        }
+      ]
+    },
+    {
+      "name": "Eliminar Producto",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Producto eliminado exitosamente\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "id": "36c507e5-d439-4a5f-b68b-3af10362299b"
+          }
+        }
+      ],
+      "id": "e28890cb-10ec-4ed2-ba3b-3a10f94e82e8",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/product-service/products?id=3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "product-service",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "3"
+            }
+          ]
+        },
+        "description": "Elimina un producto por su ID. Cambia el parámetro 'id' según el producto que quieras eliminar."
+      },
+      "response": [
+        {
+          "id": "51418af7-30dc-48c9-aa9b-ce78512b222a",
+          "name": "9. Eliminar Producto",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/product-service/products?id=3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "product-service",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "3"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Mar 2026 20:26:03 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 3,\n    \"name\": \"Lavadora LG\",\n    \"brand\": \"LG\",\n    \"price\": 650\n}"
+        }
+      ]
+    },
+    {
+      "name": "ERROR: ProductNotFoundException - Producto No Encontrado (Error 404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "",
+              "pm.test(\"Mensaje de error presente\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('message');",
+              "});"
+            ],
+            "type": "text/javascript",
+            "id": "13f5c6a8-094c-4003-8c8c-484a8ac1fb1d"
+          }
+        }
+      ],
+      "id": "8ed003fe-aa38-4da8-8eaf-7348eb8f379d",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/product-service/products/99999",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "product-service",
+            "products",
+            "99999"
+          ]
+        },
+        "description": "Prueba el manejo de errores cuando se busca un producto que no existe"
+      },
+      "response": [
+        {
+          "id": "e0c97a27-d1df-4dac-95a9-7544186872cc",
+          "name": "10. Producto No Encontrado (Error 404)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/product-service/products/99999",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "product-service",
+                "products",
+                "99999"
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Mar 2026 20:26:24 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"timestamp\": \"2026-03-04T20:26:24.51622812\",\n    \"status\": 404,\n    \"error\": \"Not Found\",\n    \"message\": \"Producto no encontrado con ID: 99999\",\n    \"path\": \"/products/99999\"\n}"
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ],
+        "id": "56f40deb-bbfe-4af9-a85c-a752b10cf739"
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ],
+        "id": "39d4106e-425c-47c4-b798-dc1bb626b466"
+      }
+    }
+  ],
+  "variable": [
+    {
+      "id": "30c9bc4d-da1b-4d8c-8049-f905995973b5",
+      "key": "base_url",
+      "value": "http://localhost:8080/product-service",
+      "type": "string"
+    },
+    {
+      "id": "e5193201-c1af-4f2f-ba51-995a866a42cf",
+      "key": "product_id",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

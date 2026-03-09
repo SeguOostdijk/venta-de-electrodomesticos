@@ -52,6 +52,11 @@ public class CartService implements ICartService{
     }
 
     public void addProductToCartFallback(Long cartId, Long productId, int quantity, Throwable t) {
+        if (t instanceof CartNotFoundException) {
+            throw (CartNotFoundException) t;
+        } else if (t instanceof ProductNotFoundException) {
+            throw (ProductNotFoundException) t;
+        }
         throw new ServiceUnavailableException("Product service is unavailable. Please try again later.");
     }
 

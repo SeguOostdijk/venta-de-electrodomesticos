@@ -1,14 +1,24 @@
 package com.homeappliance_commerce.cart.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Schema(description = "Datos de producto retornados por el servicio de productos")
 public class ProductDTO {
+
+    @Schema(description = "Identificador del producto", example = "10")
     private Long id;
+
+    @Schema(description = "Nombre del producto", example = "Smart TV 50")
     private String name;
+
+    @Schema(description = "Marca del producto", example = "Samsung")
     private String brand;
+
+    @Schema(description = "Precio unitario", example = "999.99")
     private Float price;
 }
