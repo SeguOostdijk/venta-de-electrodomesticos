@@ -193,8 +193,7 @@ Cada microservicio posee su propio **Dockerfile** y el sistema completo se ejecu
 
 # Autor
 
-Segundo Oostdijk
-Desarrollador Backend
+Segundo Oostdijk - Desarrollador Backend
 
 Proyecto desarrollado para el curso:
 
