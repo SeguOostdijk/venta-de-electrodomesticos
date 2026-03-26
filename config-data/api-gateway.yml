@@ -1,6 +1,5 @@
 server:
   port: 8080
-
 spring:
   application:
     name: api-gateway
@@ -10,6 +9,12 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
 eureka:
   client:
     service-url:
