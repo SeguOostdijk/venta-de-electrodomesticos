@@ -8,7 +8,7 @@ spring:
     url: jdbc:mysql://mysql-db:3306/cart-service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: root123
+    password: ${MYSQL_ROOT_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
