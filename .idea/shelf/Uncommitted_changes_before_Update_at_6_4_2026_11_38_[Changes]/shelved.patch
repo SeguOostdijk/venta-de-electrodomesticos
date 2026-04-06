@@ -1,0 +1,292 @@
+Index: config-data/cart-service.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>server:\r\n  port: 8082\r\n\r\nspring:\r\n  application:\r\n    name: cart-service\r\n  datasource:\r\n    url: jdbc:mysql://mysql-db:3306/cart-service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    username: root\r\n    password: root123\r\n  jpa:\r\n    hibernate:\r\n      ddl-auto: update\r\neureka:\r\n  client:\r\n    service-url:\r\n      defaultZone: http://eureka-sv:8761/eureka/\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/config-data/cart-service.yml b/config-data/cart-service.yml
+--- a/config-data/cart-service.yml	(revision 5c311ed27372576a2dd3e14665332d8957004240)
++++ b/config-data/cart-service.yml	(date 1775486153068)
+@@ -8,7 +8,7 @@
+     url: jdbc:mysql://mysql-db:3306/cart-service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+     driver-class-name: com.mysql.cj.jdbc.Driver
+     username: root
+-    password: root123
++    password: ${MYSQL_ROOT_PASSWORD}
+   jpa:
+     hibernate:
+       ddl-auto: update
+Index: config-data/api-gateway.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>server:\r\n  port: 8080\r\n\r\nspring:\r\n  application:\r\n    name: api-gateway\r\n  cloud:\r\n    gateway:\r\n      discovery:\r\n        locator:\r\n          enabled: true\r\n          lower-case-service-id: true\r\neureka:\r\n  client:\r\n    service-url:\r\n      defaultZone: http://eureka-sv:8761/eureka/\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/config-data/api-gateway.yml b/config-data/api-gateway.yml
+--- a/config-data/api-gateway.yml	(revision 5c311ed27372576a2dd3e14665332d8957004240)
++++ b/config-data/api-gateway.yml	(date 1775486153065)
+@@ -1,6 +1,5 @@
+ server:
+   port: 8080
+-
+ spring:
+   application:
+     name: api-gateway
+@@ -10,6 +9,7 @@
+         locator:
+           enabled: true
+           lower-case-service-id: true
++  
+ eureka:
+   client:
+     service-url:
+Index: README.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/README.md b/README.md
+new file mode 100644
+--- /dev/null	(date 1775486153065)
++++ b/README.md	(date 1775486153065)
+@@ -0,0 +1,200 @@
++# Comercio de Electrodomésticos – API de Microservicios
++
++Sistema de gestión para una tienda online de **electrodomésticos**, desarrollado mediante una **arquitectura de microservicios** utilizando **Spring Cloud**.
++
++El sistema permite consultar productos, gestionar carritos de compra y registrar ventas, proporcionando una experiencia de compra distribuida mediante diferentes servicios que se comunican entre sí.
++
++Este proyecto fue desarrollado como **Trabajo Práctico Integrador Final** del curso **Microservicios con Spring Cloud** de **TodoCode Academy**, con el objetivo de demostrar conocimientos en desarrollo de microservicios, comunicación entre servicios y despliegue mediante Docker.
++
++---
++
++# Arquitectura del sistema
++
++El sistema está compuesto por varios microservicios independientes que colaboran entre sí para ofrecer las funcionalidades del sistema.
++
++Microservicios principales:
++
++### Product Service
++
++Microservicio encargado de administrar los productos disponibles en la tienda.
++Permite consultar los electrodomésticos disponibles junto con su información básica.
++
++### Cart Service
++
++Microservicio encargado de gestionar los carritos de compra.
++Permite agregar y eliminar productos del carrito y calcular el total de la compra.
++
++### Sale Service
++
++Microservicio encargado de registrar las ventas realizadas.
++Cada venta se encuentra asociada a un carrito de compras.
++
++Infraestructura de microservicios:
++
++Eureka Server → Registro y descubrimiento de servicios
++
++API Gateway → Punto de entrada para clientes externos
++
++Config Server → Centralización de configuraciones
++
++Spring Cloud LoadBalancer → Balanceo de carga entre instancias
++
++Resilience4J → Circuit Breaker y Retry para tolerancia a fallos
++
++---
++
++# Tecnologías utilizadas
++
++* Java 23
++* Spring Boot
++* Spring Cloud
++* Spring Data JPA
++* Hibernate
++* MySQL
++* Docker
++* Eureka Server
++* API Gateway
++* Config Server
++* Resilience4J
++* OpenAPI / Swagger
++* Postman
++* Maven
++
++---
++
++# Estructura del proyecto
++
++```
++homeappliance-commerce
++│
++├── api-gateway
++├── config-server
++├── eureka-sv
++│
++├── product-service
++├── cart-service
++├── sale-service
++│
++├── docker-compose.yml
++│
++└── postman
++    ├── product-service_collection.json
++    ├── cart-service_collection.json
++    ├── sale-service_collection.json
++```
++
++---
++
++# Ejecutar la aplicación con Docker
++
++### 1. Clonar el repositorio
++
++```
++git clone https://github.com/tu-usuario/homeappliance-commerce.git
++cd homeappliance-commerce
++```
++
++---
++
++### 2. Construir los contenedores
++
++```
++docker-compose build
++```
++
++---
++
++### 3. Levantar el sistema
++
++```
++docker-compose up
++```
++
++Esto iniciará automáticamente:
++
++* MySQL
++* Eureka Server
++* Config Server
++* API Gateway
++* Product Service
++* Cart Service
++* Sale Service
++
++---
++
++# Acceso a los servicios
++
++### Eureka Dashboard
++
++```
++http://localhost:8761
++```
++
++### API Gateway
++
++```
++http://localhost:8080
++```
++
++---
++
++# Documentación de la API (Swagger)
++
++Cada microservicio expone documentación interactiva mediante **Swagger (OpenAPI)**.
++
++Product Service
++
++```
++http://localhost:8081/swagger-ui/index.html
++```
++
++Cart Service
++
++```
++http://localhost:8082/swagger-ui/index.html
++```
++
++Sale Service
++
++```
++http://localhost:8083/swagger-ui/index.html
++```
++
++Desde Swagger es posible:
++
++* visualizar todos los endpoints disponibles
++* probar peticiones HTTP (GET, POST, PUT, DELETE)
++* revisar los modelos de datos utilizados
++
++---
++
++# Probar la API con Postman
++
++El repositorio incluye colecciones de Postman para probar los endpoints de cada microservicio.
++
++Pasos:
++
++1. Abrir Postman
++2. Importar las colecciones ubicadas en
++
++```
++/postman
++```
++
++3. Ejecutar las peticiones disponibles en cada colección.
++
++---
++
++# Docker
++
++Cada microservicio posee su propio **Dockerfile** y el sistema completo se ejecuta mediante **docker-compose**, lo que permite levantar toda la arquitectura de microservicios con un solo comando.
++
++---
++
++# Autor
++
++Segundo Oostdijk - Desarrollador Backend
++
++Proyecto desarrollado para el curso:
++
++**Microservicios con Spring Cloud – TodoCode Academy**
+Index: config-data/sale-service.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>server:\r\n  port: 8083\r\n\r\nspring:\r\n  application:\r\n    name: sale-service\r\n  datasource:\r\n    url: jdbc:mysql://mysql-db:3306/sale-service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    username: root\r\n    password: root123\r\n  jpa:\r\n    hibernate:\r\n      ddl-auto: update\r\neureka:\r\n  client:\r\n    service-url:\r\n      defaultZone: http://eureka-sv:8761/eureka/\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/config-data/sale-service.yml b/config-data/sale-service.yml
+--- a/config-data/sale-service.yml	(revision 5c311ed27372576a2dd3e14665332d8957004240)
++++ b/config-data/sale-service.yml	(date 1775486153069)
+@@ -8,7 +8,7 @@
+     url: jdbc:mysql://mysql-db:3306/sale-service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+     driver-class-name: com.mysql.cj.jdbc.Driver
+     username: root
+-    password: root123
++    password: ${MYSQL_ROOT_PASSWORD}
+   jpa:
+     hibernate:
+       ddl-auto: update
+Index: config-data/product-service.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>server:\r\n  port: 8081\r\n\r\nspring:\r\n  application:\r\n    name: product-service\r\n  datasource:\r\n    url: jdbc:mysql://mysql-db:3306/product-service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    username: root\r\n    password: root123\r\n  jpa:\r\n    hibernate:\r\n      ddl-auto: update\r\neureka:\r\n  client:\r\n    service-url:\r\n      defaultZone: http://eureka-sv:8761/eureka/\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/config-data/product-service.yml b/config-data/product-service.yml
+--- a/config-data/product-service.yml	(revision 5c311ed27372576a2dd3e14665332d8957004240)
++++ b/config-data/product-service.yml	(date 1775486153069)
+@@ -8,7 +8,7 @@
+     url: jdbc:mysql://mysql-db:3306/product-service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+     driver-class-name: com.mysql.cj.jdbc.Driver
+     username: root
+-    password: root123
++    password: ${MYSQL_ROOT_PASSWORD}
+   jpa:
+     hibernate:
+       ddl-auto: update
