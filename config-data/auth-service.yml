@@ -1,3 +1,27 @@
+server:
+  port: 8084
+
 jwt:
   secret: ${JWT_SECRET}
   expiration: 86400000
+
+spring:  
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:mysql://mysql-db:3306/auth-service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: ${MYSQL_ROOT_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-sv:8761/eureka/
