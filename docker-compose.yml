@@ -123,6 +123,31 @@ services:
       start_period: 50s
     restart: on-failure
 
+  auth-service:
+    build: auth-service
+    container_name: auth-service
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "8084:8084"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+      eureka-sv:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    networks:
+      - homeappliance-commerce-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:8084/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+      start_period: 50s
+    restart: on-failure
+
   api-gateway:
     build: api-gateway
     container_name: api-gateway
@@ -142,6 +167,19 @@ services:
       retries: 2
       start_period: 50s
     restart: on-failure
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    ports:
+      - "8090:80"
+    environment:
+      PMA_HOSTS: mysql-db
+      PMA_PORT: 3306
+    networks:
+      - homeappliance-commerce-net
+    depends_on:
+      - mysql-db
 
 networks:
   homeappliance-commerce-net:

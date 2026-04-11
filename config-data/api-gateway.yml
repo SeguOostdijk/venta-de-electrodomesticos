@@ -1,15 +1,59 @@
 server:
   port: 8080
+
+jwt:
+  secret: ${JWT_SECRET}
+
 spring:
   application:
     name: api-gateway
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
-  
+      routes:
+        # Auth Service - all public
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+
+        # Product Service - public GETs
+        - id: product-service-public
+          uri: lb://product-service
+          predicates:
+            - Path=/products/**
+            - Method=GET
+
+        # Product Service - protected writes (ADMIN only)
+        - id: product-service-admin
+          uri: lb://product-service
+          predicates:
+            - Path=/products/**
+            - Method=POST,PUT,DELETE
+          filters:
+            - JwtAuthentication=ADMIN
+
+        # Cart Service - all public
+        - id: cart-service
+          uri: lb://cart-service
+          predicates:
+            - Path=/carts/**
+
+        # Sale Service - public POST (create sale from cart)
+        - id: sale-service-public
+          uri: lb://sale-service
+          predicates:
+            - Path=/sales/**
+            - Method=POST
+
+        # Sale Service - protected GETs and DELETE (ADMIN only)
+        - id: sale-service-admin
+          uri: lb://sale-service
+          predicates:
+            - Path=/sales/**
+            - Method=GET,DELETE
+          filters:
+            - JwtAuthentication=ADMIN
+
 eureka:
   client:
     service-url:
