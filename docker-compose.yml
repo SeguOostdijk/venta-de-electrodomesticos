@@ -151,6 +151,8 @@ services:
   api-gateway:
     build: api-gateway
     container_name: api-gateway
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - "8080:8080"
     depends_on:

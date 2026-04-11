@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAuthenticationFilter.Config> {
+public class JwtAuthenticationGatewayFilterFactory extends AbstractGatewayFilterFactory<JwtAuthenticationGatewayFilterFactory.Config> {
 
     @Autowired
     private JwtUtil jwtUtil;
 
-    public JwtAuthenticationFilter() {
+    public JwtAuthenticationGatewayFilterFactory() {
         super(Config.class);
     }
 
