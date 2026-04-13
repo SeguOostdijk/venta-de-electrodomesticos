@@ -47,7 +47,7 @@ public class AuthService {
                 .name(request.getName())
                 .build();
 
-        userRepository.save(user);
+        user = userRepository.save(user);
         return buildAuthResponse(user);
     }
 

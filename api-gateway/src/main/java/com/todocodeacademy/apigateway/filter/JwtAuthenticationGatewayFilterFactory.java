@@ -4,10 +4,14 @@ import com.todocodeacademy.apigateway.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Component
@@ -31,21 +35,18 @@ public class JwtAuthenticationGatewayFilterFactory extends AbstractGatewayFilter
             String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                return exchange.getResponse().setComplete();
+                return writeErrorResponse(exchange.getResponse(), HttpStatus.UNAUTHORIZED, "Encabezado de autorización ausente o inválido");
             }
 
             String token = authHeader.substring(7);
 
             if (!jwtUtil.isTokenValid(token)) {
-                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                return exchange.getResponse().setComplete();
+                return writeErrorResponse(exchange.getResponse(), HttpStatus.UNAUTHORIZED, "Token inválido o expirado");
             }
 
             String role = jwtUtil.extractRole(token);
             if (config.getRequiredRole() != null && !config.getRequiredRole().equals(role)) {
-                exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
-                return exchange.getResponse().setComplete();
+                return writeErrorResponse(exchange.getResponse(), HttpStatus.FORBIDDEN, "Acceso denegado: permisos insuficientes");
             }
 
             String userId = jwtUtil.extractUserId(token);
@@ -54,6 +55,14 @@ public class JwtAuthenticationGatewayFilterFactory extends AbstractGatewayFilter
                                    .header("X-User-Role", role))
                     .build());
         };
+    }
+
+    private Mono<Void> writeErrorResponse(org.springframework.http.server.reactive.ServerHttpResponse response, HttpStatus status, String message) {
+        response.setStatusCode(status);
+        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+        String body = "{\"error\": \"" + message + "\"}";
+        DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
+        return response.writeWith(Mono.just(buffer));
     }
 
     public static class Config {
