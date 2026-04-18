@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
@@ -21,8 +22,11 @@ public class Cart {
     @Schema(description = "Identificador del carrito", example = "1")
     private Long id;
 
+    @Schema(description = "ID del usuario propietario del carrito", example = "7")
+    private Long userId;
+
     @Schema(description = "Precio total acumulado del carrito", example = "2499.99")
-    private Float totalPrice;
+    private BigDecimal totalPrice;
 
     @ElementCollection
     @CollectionTable(name = "cart_products", joinColumns = @JoinColumn(name = "cart_id"))

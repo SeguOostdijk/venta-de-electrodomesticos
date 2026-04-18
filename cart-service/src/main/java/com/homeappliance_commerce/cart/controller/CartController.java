@@ -31,8 +31,9 @@ public class CartController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     })
     @PostMapping
-    public ResponseEntity<Cart> createEmptyCart() {
-        Cart createdCart = cartService.createEmptyCart();
+    public ResponseEntity<Cart> createEmptyCart(
+            @RequestHeader("X-User-Id") Long userId) {
+        Cart createdCart = cartService.createEmptyCart(userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCart);
     }
 

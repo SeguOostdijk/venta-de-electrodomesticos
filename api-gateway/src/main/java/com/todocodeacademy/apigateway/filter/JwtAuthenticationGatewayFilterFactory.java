@@ -45,7 +45,7 @@ public class JwtAuthenticationGatewayFilterFactory extends AbstractGatewayFilter
             }
 
             String role = jwtUtil.extractRole(token);
-            if (config.getRequiredRole() != null && !config.getRequiredRole().equals(role)) {
+            if (config.getRequiredRole() != null && !hasRequiredRole(role, config.getRequiredRole())) {
                 return writeErrorResponse(exchange.getResponse(), HttpStatus.FORBIDDEN, "Acceso denegado: permisos insuficientes");
             }
 
@@ -55,6 +55,12 @@ public class JwtAuthenticationGatewayFilterFactory extends AbstractGatewayFilter
                                    .header("X-User-Role", role))
                     .build());
         };
+    }
+
+    // ADMIN is a superset of USER — any role satisfies a lower or equal required role
+    private boolean hasRequiredRole(String userRole, String requiredRole) {
+        if ("ADMIN".equals(userRole)) return true;
+        return userRole.equals(requiredRole);
     }
 
     private Mono<Void> writeErrorResponse(org.springframework.http.server.reactive.ServerHttpResponse response, HttpStatus status, String message) {

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,7 +27,7 @@ public class ProductCart {
     private String brand;
 
     @Schema(description = "Precio unitario", example = "999.99")
-    private Float price;
+    private BigDecimal price;
 
     @Schema(description = "Cantidad agregada al carrito", example = "2")
     private int quantity;

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
@@ -15,7 +16,7 @@ public class CartDTO {
     private Long id;
 
     @Schema(description = "Precio total acumulado del carrito", example = "1499.99")
-    private Float totalPrice;
+    private BigDecimal totalPrice;
 
     @Schema(description = "Listado de productos que contiene el carrito")
     private List<ProductCart> products;
@@ -33,7 +34,7 @@ public class CartDTO {
         private String brand;
 
         @Schema(description = "Precio unitario del producto", example = "250.00")
-        private Float price;
+        private BigDecimal price;
 
         @Schema(description = "Cantidad del producto", example = "1")
         private Integer quantity;
