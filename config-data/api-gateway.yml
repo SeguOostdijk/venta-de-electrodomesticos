@@ -32,18 +32,26 @@ spring:
           filters:
             - JwtAuthentication=ADMIN
 
-        # Cart Service - all public
+        # Cart Service - authenticated (userId injected via X-User-Id header)
         - id: cart-service
           uri: lb://cart-service
           predicates:
             - Path=/carts/**
+          filters:
+            - RemoveRequestHeader=X-User-Id
+            - RemoveRequestHeader=X-User-Role
+            - JwtAuthentication=USER
 
-        # Sale Service - public POST (create sale from cart)
+        # Sale Service - authenticated POST (create sale from cart)
         - id: sale-service-public
           uri: lb://sale-service
           predicates:
             - Path=/sales/**
             - Method=POST
+          filters:
+            - RemoveRequestHeader=X-User-Id
+            - RemoveRequestHeader=X-User-Role
+            - JwtAuthentication=USER
 
         # Sale Service - protected GETs and DELETE (ADMIN only)
         - id: sale-service-admin
@@ -52,6 +60,8 @@ spring:
             - Path=/sales/**
             - Method=GET,DELETE
           filters:
+            - RemoveRequestHeader=X-User-Id
+            - RemoveRequestHeader=X-User-Role
             - JwtAuthentication=ADMIN
 
 eureka:
