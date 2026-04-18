@@ -38,8 +38,9 @@ public class SaleController {
     })
     public ResponseEntity<Sale> createSale(
             @Parameter(description = "ID del carrito", example = "12")
-            @PathVariable Long cartId) {
-        Sale newSale = saleService.createSale(cartId);
+            @PathVariable Long cartId,
+            @RequestHeader("X-User-Id") Long userId) {
+        Sale newSale = saleService.createSale(cartId, userId);
         return new ResponseEntity<>(newSale, HttpStatus.CREATED);
     }
 

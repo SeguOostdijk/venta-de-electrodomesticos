@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Schema(name = "Product", description = "Representa un producto comercializado")
@@ -27,6 +29,6 @@ public class Product {
     private String brand;
 
     @Schema(description = "Precio unitario del producto", example = "899999.99", requiredMode = Schema.RequiredMode.REQUIRED)
-    private Float price;
+    private BigDecimal price;
 
 }

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @Schema(description = "Datos de producto retornados por el servicio de productos")
 public class ProductDTO {
@@ -20,5 +22,5 @@ public class ProductDTO {
     private String brand;
 
     @Schema(description = "Precio unitario", example = "999.99")
-    private Float price;
+    private BigDecimal price;
 }

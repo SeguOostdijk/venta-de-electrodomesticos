@@ -11,6 +11,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -58,6 +61,22 @@ public class ProductController {
     }
 
     @GetMapping
+    @Operation(
+            summary = "Listar todos los productos",
+            description = "Devuelve el catálogo completo de productos con soporte de paginación",
+            operationId = "findAllProducts"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Productos recuperados correctamente"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public ResponseEntity<Page<Product>> findAll(
+            @PageableDefault(size = 20, sort = "name") Pageable pageable) {
+        return ResponseEntity.ok(productService.findAll(pageable));
+    }
+
+    @GetMapping("/batch")
     @Operation(
             summary = "Obtener productos por lista de IDs",
             description = "Devuelve una lista de productos segun los IDs enviados por query param",

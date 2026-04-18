@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ISaleService {
 
-    Sale createSale(Long cartId);
+    Sale createSale(Long cartId, Long userId);
     List<Sale> getAllSales();
     Sale getSaleById(Long id);
     List<Sale> getSalesByDate(String date);

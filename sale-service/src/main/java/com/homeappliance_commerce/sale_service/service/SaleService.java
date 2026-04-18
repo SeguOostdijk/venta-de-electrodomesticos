@@ -28,12 +28,13 @@ public class SaleService implements ISaleService {
 
     @CircuitBreaker(name = "cart-service", fallbackMethod = "createSaleFallback")
     @Override
-    public Sale createSale(Long cartId) {
+    public Sale createSale(Long cartId, Long userId) {
         // Obtener el carrito del microservicio de carrito
         CartDTO selectedCart = cartApi.getCartById(cartId);
 
         // Crear la nueva venta
         Sale newSale = new Sale();
+        newSale.setUserId(userId);
         newSale.setDate(LocalDate.now());
         newSale.setTotalPrice(selectedCart.getTotalPrice());
 
@@ -51,11 +52,13 @@ public class SaleService implements ISaleService {
 
         newSale.setProducts(saleProducts);
 
-        // Guardar y retornar la venta
-        return saleRepository.save(newSale);
+        // Guardar la venta y limpiar el carrito
+        Sale savedSale = saleRepository.save(newSale);
+        cartApi.clearCart(cartId);
+        return savedSale;
     }
 
-    public Sale createSaleFallback(Long cartId, Throwable t) {
+    public Sale createSaleFallback(Long cartId, Long userId, Throwable t) {
         if (t instanceof FeignException.FeignClientException)
         {
             throw new CartNotFoundException("Cart with ID " + cartId + " not found");

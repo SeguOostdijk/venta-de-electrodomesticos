@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,11 +21,14 @@ public class Sale {
     @Schema(description = "Identificador unico de la venta", example = "10")
     private Long id;
 
+    @Schema(description = "ID del usuario que realizó la venta", example = "7")
+    private Long userId;
+
     @Schema(description = "Fecha en la que se registro la venta", example = "2026-03-09")
     private LocalDate date;
 
     @Schema(description = "Monto total de la venta", example = "1499.99")
-    private Float totalPrice;
+    private BigDecimal totalPrice;
 
     @ElementCollection
     @CollectionTable(name = "sale_products", joinColumns = @JoinColumn(name = "sale_id"))

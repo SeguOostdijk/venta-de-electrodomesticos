@@ -13,6 +13,7 @@ import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 @Service
@@ -24,9 +25,10 @@ public class CartService implements ICartService{
     private IProductApi productApi;
 
     @Override
-    public Cart createEmptyCart() {
+    public Cart createEmptyCart(Long userId) {
         Cart cart = new Cart();
-        cart.setTotalPrice(0F);
+        cart.setUserId(userId);
+        cart.setTotalPrice(BigDecimal.ZERO);
         cart.setProducts(new ArrayList<>());
         return cartRepository.save(cart);
     }
@@ -43,7 +45,7 @@ public class CartService implements ICartService{
         if (selectedProduct != null) {
             ProductCart productCart = new ProductCart(selectedProduct.getId(), selectedProduct.getName(),selectedProduct.getBrand(), selectedProduct.getPrice(), quantity);
             selectedCart.getProducts().add(productCart);
-            selectedCart.setTotalPrice(selectedCart.getTotalPrice() + selectedProduct.getPrice()*quantity);
+            selectedCart.setTotalPrice(selectedCart.getTotalPrice().add(selectedProduct.getPrice().multiply(BigDecimal.valueOf(quantity))));
             cartRepository.save(selectedCart);
         }
         else {
@@ -68,7 +70,7 @@ public class CartService implements ICartService{
                 .findFirst()
                 .orElseThrow(() -> new ProductNotFoundException("Product not found in cart with id: " + productId));
         selectedCart.getProducts().remove(productToRemove);
-        selectedCart.setTotalPrice(selectedCart.getTotalPrice() - productToRemove.getPrice()*productToRemove.getQuantity());
+        selectedCart.setTotalPrice(selectedCart.getTotalPrice().subtract(productToRemove.getPrice().multiply(BigDecimal.valueOf(productToRemove.getQuantity()))));
         cartRepository.save(selectedCart);
     }
 
@@ -76,7 +78,7 @@ public class CartService implements ICartService{
     public void clearCart(Long cartId) {
         Cart selectedCart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("Cart not found with id: " + cartId));
         selectedCart.getProducts().clear();
-        selectedCart.setTotalPrice(0F);
+        selectedCart.setTotalPrice(BigDecimal.ZERO);
         cartRepository.save(selectedCart);
     }
 
