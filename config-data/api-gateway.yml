@@ -53,6 +53,17 @@ spring:
             - RemoveRequestHeader=X-User-Role
             - JwtAuthentication=USER
 
+        # Sale Service - user's own sales (USER)
+        - id: sale-service-my-sales
+          uri: lb://sale-service
+          predicates:
+            - Path=/sales/my
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=X-User-Id
+            - RemoveRequestHeader=X-User-Role
+            - JwtAuthentication=USER
+
         # Sale Service - protected GETs and DELETE (ADMIN only)
         - id: sale-service-admin
           uri: lb://sale-service
