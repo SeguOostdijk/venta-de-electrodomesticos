@@ -1,16 +1,16 @@
 package com.homeappliance_commerce.sale_service.service;
 
+import com.homeappliance_commerce.sale_service.client.ICartApi;
 import com.homeappliance_commerce.sale_service.dto.CartDTO;
 import com.homeappliance_commerce.sale_service.exception.CartNotFoundException;
 import com.homeappliance_commerce.sale_service.exception.SaleNotFoundException;
 import com.homeappliance_commerce.sale_service.exception.ServiceUnavailableException;
 import com.homeappliance_commerce.sale_service.model.Sale;
 import com.homeappliance_commerce.sale_service.model.SaleProduct;
-import com.homeappliance_commerce.sale_service.repository.ICartApi;
 import com.homeappliance_commerce.sale_service.repository.ISaleRepository;
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,13 +18,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class SaleService implements ISaleService {
 
-    @Autowired
-    private ISaleRepository saleRepository;
-
-    @Autowired
-    private ICartApi cartApi;
+    private final ISaleRepository saleRepository;
+    private final ICartApi cartApi;
 
     @CircuitBreaker(name = "cart-service", fallbackMethod = "createSaleFallback")
     @Override
@@ -59,8 +57,8 @@ public class SaleService implements ISaleService {
     }
 
     public Sale createSaleFallback(Long cartId, Long userId, Throwable t) {
-        if (t instanceof FeignException.FeignClientException)
-        {
+        if (t instanceof CartNotFoundException ex) throw ex;
+        if (t instanceof FeignException.FeignClientException) {
             throw new CartNotFoundException("Cart with ID " + cartId + " not found");
         }
         throw new ServiceUnavailableException("Cart service is unavailable. Please try again later.");
@@ -102,5 +100,3 @@ public class SaleService implements ISaleService {
         saleRepository.deleteById(id);
     }
 }
-
-

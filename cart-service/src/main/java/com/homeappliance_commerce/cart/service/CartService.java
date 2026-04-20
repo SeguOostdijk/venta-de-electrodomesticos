@@ -1,5 +1,6 @@
 package com.homeappliance_commerce.cart.service;
 
+import com.homeappliance_commerce.cart.client.IProductApi;
 import com.homeappliance_commerce.cart.dto.ProductCart;
 import com.homeappliance_commerce.cart.dto.ProductDTO;
 import com.homeappliance_commerce.cart.exception.CartNotFoundException;
@@ -7,22 +8,20 @@ import com.homeappliance_commerce.cart.exception.ProductNotFoundException;
 import com.homeappliance_commerce.cart.exception.ServiceUnavailableException;
 import com.homeappliance_commerce.cart.model.Cart;
 import com.homeappliance_commerce.cart.repository.ICartRepository;
-import com.homeappliance_commerce.cart.repository.IProductApi;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
 @Service
+@RequiredArgsConstructor
 public class CartService implements ICartService{
 
-    @Autowired
-    private ICartRepository cartRepository;
-    @Autowired
-    private IProductApi productApi;
+    private final ICartRepository cartRepository;
+    private final IProductApi productApi;
 
     @Override
     public Cart createEmptyCart(Long userId) {

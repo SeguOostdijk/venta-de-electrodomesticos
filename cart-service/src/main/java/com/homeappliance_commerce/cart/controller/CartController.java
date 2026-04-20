@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/carts")
 @Tag(name = "Carritos", description = "Operaciones de gestion de carritos")
+@RequiredArgsConstructor
 public class CartController {
 
-   @Autowired
-   private ICartService cartService;
+   private final ICartService cartService;
 
     @Operation(summary = "Crear carrito vacio", description = "Crea un carrito sin productos y con total en cero.")
     @ApiResponses(value = {

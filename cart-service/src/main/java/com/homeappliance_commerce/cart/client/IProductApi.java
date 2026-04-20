@@ -1,4 +1,4 @@
-package com.homeappliance_commerce.cart.repository;
+package com.homeappliance_commerce.cart.client;
 
 import com.homeappliance_commerce.cart.dto.ProductDTO;
 import org.springframework.cloud.openfeign.FeignClient;

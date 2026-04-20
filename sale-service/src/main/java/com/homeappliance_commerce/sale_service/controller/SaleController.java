@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +21,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/sales")
 @Tag(name = "Sales", description = "Operaciones para gestionar ventas")
+@RequiredArgsConstructor
 public class SaleController {
 
-    @Autowired
-    private ISaleService saleService;
+    private final ISaleService saleService;
 
     @PostMapping("/{cartId}")
     @Operation(summary = "Crear venta desde carrito", description = "Genera una venta a partir del identificador de un carrito")
