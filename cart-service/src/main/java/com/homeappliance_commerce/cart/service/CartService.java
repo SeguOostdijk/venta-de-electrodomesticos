@@ -85,4 +85,10 @@ public class CartService implements ICartService{
     public Cart getCartById(Long cartId) {
         return cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("Cart not found with id: " + cartId));
     }
+
+    @Override
+    public Cart getOrCreateCartByUserId(Long userId) {
+        return cartRepository.findByUserId(userId)
+                .orElseGet(() -> createEmptyCart(userId));
+    }
 }

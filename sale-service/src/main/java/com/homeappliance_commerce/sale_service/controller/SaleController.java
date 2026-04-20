@@ -98,4 +98,16 @@ public class SaleController {
         saleService.deleteSale(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/my")
+    @Operation(summary = "Listar mis ventas", description = "Obtiene todas las ventas del usuario autenticado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ventas encontradas",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Sale.class))))
+    })
+    public ResponseEntity<List<Sale>> getMySales(
+            @RequestHeader("X-User-Id") Long userId) {
+        List<Sale> sales = saleService.getSalesByUserId(userId);
+        return new ResponseEntity<>(sales, HttpStatus.OK);
+    }
 }

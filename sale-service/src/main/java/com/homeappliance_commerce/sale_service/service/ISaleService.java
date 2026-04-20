@@ -11,4 +11,5 @@ public interface ISaleService {
     Sale getSaleById(Long id);
     List<Sale> getSalesByDate(String date);
     void deleteSale(Long id);
+    List<Sale> getSalesByUserId(Long userId);
 }

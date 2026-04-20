@@ -172,4 +172,22 @@ public class ProductController {
         Product deletedProduct = productService.deleteById(id);
         return ResponseEntity.ok(deletedProduct);
     }
+
+    @GetMapping("/search")
+    @Operation(
+            summary = "Buscar productos por nombre o marca",
+            description = "Busqueda parcial e insensible a mayusculas por nombre o marca del producto, con soporte de paginacion",
+            operationId = "searchProducts"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Resultados de busqueda obtenidos correctamente"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public ResponseEntity<Page<Product>> search(
+            @Parameter(description = "Texto a buscar en nombre o marca", example = "Samsung", required = true)
+            @RequestParam("q") String q,
+            @PageableDefault(size = 20, sort = "name") Pageable pageable) {
+        return ResponseEntity.ok(productService.search(q, pageable));
+    }
 }

@@ -99,4 +99,9 @@ public class SaleService implements ISaleService {
         }
         saleRepository.deleteById(id);
     }
+
+    @Override
+    public List<Sale> getSalesByUserId(Long userId) {
+        return saleRepository.findByUserId(userId);
+    }
 }

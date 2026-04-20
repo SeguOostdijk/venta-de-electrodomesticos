@@ -66,4 +66,9 @@ public class ProductService implements IProductService {
         productRepository.delete(selectedProduct);
         return selectedProduct;
     }
+
+    @Override
+    public Page<Product> search(String q, Pageable pageable) {
+        return productRepository.searchByNameOrBrand(q, pageable);
+    }
 }

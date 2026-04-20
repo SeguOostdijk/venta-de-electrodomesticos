@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface ISaleRepository extends JpaRepository<Sale,Long> {
     List<Sale> findByDate(LocalDate date);
+    List<Sale> findByUserId(Long userId);
 }

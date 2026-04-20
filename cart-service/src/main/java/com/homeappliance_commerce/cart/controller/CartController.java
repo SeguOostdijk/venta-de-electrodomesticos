@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,20 +21,6 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
 
    private final ICartService cartService;
-
-    @Operation(summary = "Crear carrito vacio", description = "Crea un carrito sin productos y con total en cero.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Carrito creado correctamente",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Cart.class))),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
-    })
-    @PostMapping
-    public ResponseEntity<Cart> createEmptyCart(
-            @RequestHeader("X-User-Id") Long userId) {
-        Cart createdCart = cartService.createEmptyCart(userId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCart);
-    }
 
     @Operation(summary = "Agregar producto al carrito", description = "Agrega un producto con una cantidad determinada al carrito indicado.")
     @ApiResponses(value = {
@@ -100,5 +85,18 @@ public class CartController {
     public ResponseEntity<Cart> getCartById(
             @Parameter(description = "Identificador del carrito", example = "1") @PathVariable Long cartId) {
         return ResponseEntity.ok(cartService.getCartById(cartId));
+    }
+
+    @Operation(summary = "Obtener o crear carrito del usuario", description = "Devuelve el carrito asociado al usuario. Si no existe, crea uno nuevo vacio.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Carrito encontrado o creado",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Cart.class))),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
+    })
+    @GetMapping("/user")
+    public ResponseEntity<Cart> getOrCreateCartByUser(
+            @RequestHeader("X-User-Id") Long userId) {
+        return ResponseEntity.ok(cartService.getOrCreateCartByUserId(userId));
     }
 }
