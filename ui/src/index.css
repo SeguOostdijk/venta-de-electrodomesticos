@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: oklch(47.3% 0.234 264.4);
+  --color-primary-hover: oklch(39.5% 0.22 264.4);
+  --color-accent: oklch(70.7% 0.213 47.6);
+  --color-accent-hover: oklch(62% 0.21 47.6);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased;
+  font-family: system-ui, -apple-system, sans-serif;
+}

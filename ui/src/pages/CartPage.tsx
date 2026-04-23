@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useUserCart } from '../features/cart/hooks/useUserCart'
 import { useClearCart } from '../features/cart/hooks/useClearCart'
 import { useCreateSale } from '../features/cart/hooks/useCreateSale'
@@ -9,6 +10,7 @@ export default function CartPage() {
   const { mutate: clearCart, isPending: isClearing } = useClearCart()
   const { mutate: createSale, isPending: isCheckingOut } = useCreateSale()
   const navigate = useNavigate()
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
 
   const total = cart?.products?.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -19,8 +21,10 @@ export default function CartPage() {
 
   function handleCheckout() {
     if (!cart) return
+    setCheckoutError(null)
     createSale(cart.id, {
       onSuccess: () => navigate('/my-orders'),
+      onError: () => setCheckoutError('No se pudo realizar la operación. Stock insuficiente.'),
     })
   }
 
@@ -75,6 +79,9 @@ export default function CartPage() {
           <span className="text-sm text-slate-500">{itemCount} {itemCount === 1 ? 'producto' : 'productos'}</span>
           <span className="text-xl font-bold text-slate-900">${total.toLocaleString('es-AR')}</span>
         </div>
+        {checkoutError && (
+          <p className="text-sm text-red-500 text-center -mb-1">{checkoutError}</p>
+        )}
         <button
           onClick={handleCheckout}
           disabled={isCheckingOut}

@@ -37,7 +37,7 @@ export default function ProductsPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Productos</h1>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Productos</h1>
           {data && (
             <p className="text-sm text-slate-500 mt-1">
               {data.totalElements} {data.totalElements === 1 ? 'resultado' : 'resultados'}
