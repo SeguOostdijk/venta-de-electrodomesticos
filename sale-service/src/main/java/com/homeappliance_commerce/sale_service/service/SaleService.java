@@ -40,7 +40,7 @@ public class SaleService implements ISaleService {
         List<SaleProduct> saleProducts = selectedCart.getProducts()
                 .stream()
                 .map(productCart -> new SaleProduct(
-                        productCart.getProductId(),
+                        productCart.getId(),
                         productCart.getName(),
                         productCart.getBrand(),
                         productCart.getPrice(),

@@ -25,7 +25,7 @@ public class CartDTO {
     @Schema(name = "CartProduct", description = "Producto dentro del carrito")
     public static class ProductCart {
         @Schema(description = "Identificador del producto", example = "21")
-        private Long productId;
+        private Long id;
 
         @Schema(description = "Nombre del producto", example = "Microondas")
         private String name;
