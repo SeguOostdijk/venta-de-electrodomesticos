@@ -23,4 +23,7 @@ public class ProductDTO {
 
     @Schema(description = "Precio unitario", example = "999.99")
     private BigDecimal price;
+
+    @Schema(description = "Stock disponible", example = "15")
+    private Integer stock;
 }

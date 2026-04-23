@@ -4,6 +4,7 @@ import com.homeappliance_commerce.cart.client.IProductApi;
 import com.homeappliance_commerce.cart.dto.ProductCart;
 import com.homeappliance_commerce.cart.dto.ProductDTO;
 import com.homeappliance_commerce.cart.exception.CartNotFoundException;
+import com.homeappliance_commerce.cart.exception.InsufficientStockException;
 import com.homeappliance_commerce.cart.exception.ProductNotFoundException;
 import com.homeappliance_commerce.cart.exception.ServiceUnavailableException;
 import com.homeappliance_commerce.cart.model.Cart;
@@ -44,6 +45,10 @@ public class CartService implements ICartService{
         if (selectedProduct == null) {
             throw new ProductNotFoundException("Product not found with id: " + productId);
         }
+        if (selectedProduct.getStock() == null || selectedProduct.getStock() < quantity) {
+            int available = selectedProduct.getStock() == null ? 0 : selectedProduct.getStock();
+            throw new InsufficientStockException(productId, available, quantity);
+        }
         selectedCart.getProducts().stream()
                 .filter(p -> p.getId().equals(productId))
                 .findFirst()
@@ -59,11 +64,9 @@ public class CartService implements ICartService{
     }
 
     public void addProductToCartFallback(Long cartId, Long productId, int quantity, Throwable t) {
-        if (t instanceof CartNotFoundException) {
-            throw (CartNotFoundException) t;
-        } else if (t instanceof ProductNotFoundException) {
-            throw (ProductNotFoundException) t;
-        }
+        if (t instanceof CartNotFoundException ex) throw ex;
+        if (t instanceof ProductNotFoundException ex) throw ex;
+        if (t instanceof InsufficientStockException ex) throw ex;
         throw new ServiceUnavailableException("Product service is unavailable. Please try again later.");
     }
 
@@ -96,5 +99,25 @@ public class CartService implements ICartService{
     public Cart getOrCreateCartByUserId(Long userId) {
         return cartRepository.findByUserId(userId)
                 .orElseGet(() -> createEmptyCart(userId));
+    }
+
+    @Override
+    public void updateProductQuantity(Long cartId, Long productId, int quantity) {
+        Cart selectedCart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new CartNotFoundException("Cart not found with id: " + cartId));
+        ProductCart existing = selectedCart.getProducts().stream()
+                .filter(p -> p.getId().equals(productId))
+                .findFirst()
+                .orElseThrow(() -> new ProductNotFoundException("Product not found in cart with id: " + productId));
+        BigDecimal oldSubtotal = existing.getPrice().multiply(BigDecimal.valueOf(existing.getQuantity()));
+        if (quantity <= 0) {
+            selectedCart.getProducts().remove(existing);
+            selectedCart.setTotalPrice(selectedCart.getTotalPrice().subtract(oldSubtotal));
+        } else {
+            BigDecimal newSubtotal = existing.getPrice().multiply(BigDecimal.valueOf(quantity));
+            existing.setQuantity(quantity);
+            selectedCart.setTotalPrice(selectedCart.getTotalPrice().subtract(oldSubtotal).add(newSubtotal));
+        }
+        cartRepository.save(selectedCart);
     }
 }

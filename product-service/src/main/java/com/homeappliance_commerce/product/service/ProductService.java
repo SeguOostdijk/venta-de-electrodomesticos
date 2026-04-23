@@ -1,5 +1,6 @@
 package com.homeappliance_commerce.product.service;
 
+import com.homeappliance_commerce.product.exception.InsufficientStockException;
 import com.homeappliance_commerce.product.exception.ProductNotFoundException;
 import com.homeappliance_commerce.product.model.Product;
 import com.homeappliance_commerce.product.repository.IProductRepository;
@@ -40,9 +41,12 @@ public class ProductService implements IProductService {
             throw new IllegalArgumentException("El producto no puede ser nulo");
         }
         Product newProduct = new Product();
-        newProduct.setBrand(product.getBrand());
         newProduct.setName(product.getName());
+        newProduct.setBrand(product.getBrand());
         newProduct.setPrice(product.getPrice());
+        newProduct.setStock(product.getStock());
+        newProduct.setDescription(product.getDescription());
+        newProduct.setImageUrl(product.getImageUrl());
         return productRepository.save(newProduct);
     }
 
@@ -51,10 +55,12 @@ public class ProductService implements IProductService {
         Product selectedProduct = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
-        selectedProduct.setPrice(product.getPrice());
-        selectedProduct.setBrand(product.getBrand());
         selectedProduct.setName(product.getName());
-
+        selectedProduct.setBrand(product.getBrand());
+        selectedProduct.setPrice(product.getPrice());
+        selectedProduct.setStock(product.getStock());
+        selectedProduct.setDescription(product.getDescription());
+        selectedProduct.setImageUrl(product.getImageUrl());
         return productRepository.save(selectedProduct);
     }
 
@@ -70,5 +76,16 @@ public class ProductService implements IProductService {
     @Override
     public Page<Product> search(String q, Pageable pageable) {
         return productRepository.searchByNameOrBrand(q, pageable);
+    }
+
+    @Override
+    public void decrementStock(Long id, int quantity) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
+        if (product.getStock() < quantity) {
+            throw new InsufficientStockException(id, product.getStock(), quantity);
+        }
+        product.setStock(product.getStock() - quantity);
+        productRepository.save(product);
     }
 }

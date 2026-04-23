@@ -15,4 +15,5 @@ public interface IProductService {
     public Product edit(Long id,Product product);
     public Product deleteById(Long id);
     public Page<Product> search(String q, Pageable pageable);
+    public void decrementStock(Long id, int quantity);
 }

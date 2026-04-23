@@ -1,6 +1,7 @@
 package com.homeappliance_commerce.sale_service.service;
 
 import com.homeappliance_commerce.sale_service.client.ICartApi;
+import com.homeappliance_commerce.sale_service.client.IProductApi;
 import com.homeappliance_commerce.sale_service.dto.CartDTO;
 import com.homeappliance_commerce.sale_service.exception.CartNotFoundException;
 import com.homeappliance_commerce.sale_service.exception.SaleNotFoundException;
@@ -23,6 +24,7 @@ public class SaleService implements ISaleService {
 
     private final ISaleRepository saleRepository;
     private final ICartApi cartApi;
+    private final IProductApi productApi;
 
     @CircuitBreaker(name = "cart-service", fallbackMethod = "createSaleFallback")
     @Override
@@ -50,8 +52,19 @@ public class SaleService implements ISaleService {
 
         newSale.setProducts(saleProducts);
 
-        // Guardar la venta y limpiar el carrito
+        // Guardar la venta
         Sale savedSale = saleRepository.save(newSale);
+
+        // Decrementar stock — si falla, revertir la venta
+        try {
+            for (CartDTO.ProductCart item : selectedCart.getProducts()) {
+                productApi.decrementStock(item.getId(), item.getQuantity());
+            }
+        } catch (Exception e) {
+            saleRepository.delete(savedSale);
+            throw new ServiceUnavailableException("No se pudo completar la venta: " + e.getMessage());
+        }
+
         cartApi.clearCart(cartId);
         return savedSale;
     }

@@ -9,4 +9,5 @@ public interface ICartService {
     void clearCart(Long cartId);
     Cart getCartById(Long cartId);
     Cart getOrCreateCartByUserId(Long userId);
+    void updateProductQuantity(Long cartId, Long productId, int quantity);
 }

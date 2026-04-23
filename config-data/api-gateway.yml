@@ -47,6 +47,17 @@ spring:
           filters:
             - JwtAuthentication=ADMIN
 
+        # Cart Service - update quantity (PUT)
+        - id: cart-service-update-quantity
+          uri: lb://cart-service
+          predicates:
+            - Path=/carts/{cartId}/products/{productId}
+            - Method=PUT
+          filters:
+            - RemoveRequestHeader=X-User-Id
+            - RemoveRequestHeader=X-User-Role
+            - JwtAuthentication=USER
+
         # Cart Service - authenticated (userId injected via X-User-Id header)
         - id: cart-service
           uri: lb://cart-service

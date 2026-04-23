@@ -173,6 +173,28 @@ public class ProductController {
         return ResponseEntity.ok(deletedProduct);
     }
 
+    @PutMapping("/{id}/stock")
+    @Operation(
+            summary = "Decrementar stock de un producto",
+            description = "Reduce el stock disponible del producto en la cantidad indicada. Uso interno entre servicios.",
+            operationId = "decrementProductStock"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Stock decrementado correctamente"),
+            @ApiResponse(responseCode = "400", description = "Stock insuficiente",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Producto no encontrado",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public ResponseEntity<Void> decrementStock(
+            @Parameter(description = "ID del producto", example = "1", required = true)
+            @PathVariable Long id,
+            @Parameter(description = "Cantidad a decrementar", example = "2", required = true)
+            @RequestParam int quantity) {
+        productService.decrementStock(id, quantity);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/search")
     @Operation(
             summary = "Buscar productos por nombre o marca",

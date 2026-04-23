@@ -87,6 +87,21 @@ public class CartController {
         return ResponseEntity.ok(cartService.getCartById(cartId));
     }
 
+    @Operation(summary = "Actualizar cantidad de un producto en el carrito", description = "Modifica la cantidad de un producto. Si quantity es 0, lo elimina del carrito.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Cantidad actualizada"),
+            @ApiResponse(responseCode = "404", description = "Carrito o producto no encontrado",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
+    })
+    @PutMapping("/{cartId}/products/{productId}")
+    public ResponseEntity<Void> updateProductQuantity(
+            @Parameter(description = "Identificador del carrito", example = "1") @PathVariable Long cartId,
+            @Parameter(description = "Identificador del producto", example = "10") @PathVariable Long productId,
+            @Parameter(description = "Nueva cantidad", example = "3") @RequestParam int quantity) {
+        cartService.updateProductQuantity(cartId, productId, quantity);
+        return ResponseEntity.noContent().build();
+    }
+
     @Operation(summary = "Obtener o crear carrito del usuario", description = "Devuelve el carrito asociado al usuario. Si no existe, crea uno nuevo vacio.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Carrito encontrado o creado",
