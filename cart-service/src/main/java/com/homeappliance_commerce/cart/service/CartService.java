@@ -41,15 +41,21 @@ public class CartService implements ICartService{
         //Fetch product details using productId (Assuming you have a ProductService to fetch product details)
         //Add product to cart and update total price
         ProductDTO selectedProduct = productApi.findById(productId);
-        if (selectedProduct != null) {
-            ProductCart productCart = new ProductCart(selectedProduct.getId(), selectedProduct.getName(),selectedProduct.getBrand(), selectedProduct.getPrice(), quantity);
-            selectedCart.getProducts().add(productCart);
-            selectedCart.setTotalPrice(selectedCart.getTotalPrice().add(selectedProduct.getPrice().multiply(BigDecimal.valueOf(quantity))));
-            cartRepository.save(selectedCart);
-        }
-        else {
+        if (selectedProduct == null) {
             throw new ProductNotFoundException("Product not found with id: " + productId);
         }
+        selectedCart.getProducts().stream()
+                .filter(p -> p.getId().equals(productId))
+                .findFirst()
+                .ifPresentOrElse(
+                        existing -> existing.setQuantity(existing.getQuantity() + quantity),
+                        () -> selectedCart.getProducts().add(new ProductCart(
+                                selectedProduct.getId(), selectedProduct.getName(),
+                                selectedProduct.getBrand(), selectedProduct.getPrice(), quantity))
+                );
+        selectedCart.setTotalPrice(selectedCart.getTotalPrice()
+                .add(selectedProduct.getPrice().multiply(BigDecimal.valueOf(quantity))));
+        cartRepository.save(selectedCart);
     }
 
     public void addProductToCartFallback(Long cartId, Long productId, int quantity, Throwable t) {

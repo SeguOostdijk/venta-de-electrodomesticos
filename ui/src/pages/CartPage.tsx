@@ -10,12 +10,12 @@ export default function CartPage() {
   const { mutate: createSale, isPending: isCheckingOut } = useCreateSale()
   const navigate = useNavigate()
 
-  const total = cart?.items?.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
+  const total = cart?.products?.reduce(
+    (sum, item) => sum + item.price * item.quantity,
     0
   ) ?? 0
 
-  const itemCount = cart?.items?.length ?? 0
+  const itemCount = cart?.products?.length ?? 0
 
   function handleCheckout() {
     if (!cart) return
@@ -64,8 +64,8 @@ export default function CartPage() {
 
       {/* Items */}
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm px-6">
-        {cart.items.map((item) => (
-          <CartItemRow key={item.id} item={item} cart={cart} />
+        {cart.products.map((item, index) => (
+          <CartItemRow key={`${item.id}-${index}`} item={item} cart={cart} />
         ))}
       </div>
 
