@@ -1,0 +1,16 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: ai-service
+
+groq:
+  api-key: ${GROQ_API_KEY}
+  base-url: https://api.groq.com/openai/v1
+  model: llama-3.3-70b-versatile
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-sv:8761/eureka/

@@ -6,6 +6,7 @@
 | product-service | 8081 | `/products` |
 | cart-service | 8082 | `/carts` |
 | sale-service | 8083 | `/sales` |
+| ai-service | 8085 | `/ai` |
 | api-gateway | 8080 | — |
 
 ---
@@ -60,3 +61,11 @@
 | GET | `/sales/date/{date}` | Listar ventas por fecha `(yyyy-MM-dd)` |
 | DELETE | `/sales/{id}` | Eliminar venta |
 | GET | `/sales/my` | Listar ventas del usuario autenticado *(header: X-User-Id)* |
+
+---
+
+## ai-service (8085)
+
+| Método | Endpoint | Descripción |
+|--------|----------|------------|
+| POST | `/ai/analysis` | Generar análisis de ventas y productos *(ADMIN, body: `{ "period": "week" \| "month" }`)* |

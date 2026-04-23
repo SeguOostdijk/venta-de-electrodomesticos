@@ -90,6 +90,14 @@ spring:
             - RemoveRequestHeader=X-User-Role
             - JwtAuthentication=USER
 
+        # AI Service - ADMIN only
+        - id: ai-service
+          uri: lb://ai-service
+          predicates:
+            - Path=/ai/**
+          filters:
+            - JwtAuthentication=ADMIN
+
         # Sale Service - protected GETs and DELETE (ADMIN only)
         - id: sale-service-admin
           uri: lb://sale-service
