@@ -31,4 +31,13 @@ public class Product {
     @Schema(description = "Precio unitario del producto", example = "899999.99", requiredMode = Schema.RequiredMode.REQUIRED)
     private BigDecimal price;
 
+    @Schema(description = "Cantidad en stock", example = "50", requiredMode = Schema.RequiredMode.REQUIRED)
+    private Integer stock;
+
+    @Schema(description = "Descripción del producto", example = "Heladera de dos puertas con freezer superior, eficiencia energética A+", nullable = true)
+    private String description;
+
+    @Schema(description = "URL de imagen del producto", example = "https://example.com/images/heladera-320l.jpg", nullable = true)
+    private String imageUrl;
+
 }
