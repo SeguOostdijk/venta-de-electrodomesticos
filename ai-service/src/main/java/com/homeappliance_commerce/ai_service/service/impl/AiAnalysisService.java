@@ -1,5 +1,7 @@
 package com.homeappliance_commerce.ai_service.service.impl;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homeappliance_commerce.ai_service.client.IProductApi;
 import com.homeappliance_commerce.ai_service.client.ISaleApi;
 import com.homeappliance_commerce.ai_service.dto.*;
@@ -12,6 +14,7 @@ import org.springframework.web.client.RestClient;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,12 +26,13 @@ public class AiAnalysisService implements IAiAnalysisService {
     private final ISaleApi saleApi;
     private final IProductApi productApi;
     private final RestClient groqRestClient;
+    private final ObjectMapper objectMapper;
 
     @Value("${groq.model}")
     private String model;
 
     @Override
-    public String generateAnalysis(String period) {
+    public AnalysisResponseDTO generateAnalysis(String period) {
         int days = "week".equals(period) ? 7 : 30;
         LocalDate cutoff = LocalDate.now().minusDays(days);
 
@@ -80,7 +84,7 @@ public class AiAnalysisService implements IAiAnalysisService {
                 .collect(Collectors.joining("\n"));
 
         String prompt = String.format("""
-                Sos un analista de negocios de una tienda de electrodomésticos. Analizá estos datos de ventas y productos y generá un resumen ejecutivo conciso en español con insights accionables.
+                Sos un analista de negocios de una tienda de electrodomésticos. Analizá estos datos y respondé ÚNICAMENTE con un JSON válido, sin texto adicional, sin markdown, sin bloques de código.
 
                 PERÍODO: últimos %d días
                 TOTAL DE VENTAS: %d
@@ -90,7 +94,15 @@ public class AiAnalysisService implements IAiAnalysisService {
                 STOCK ACTUAL BAJO (≤5 unidades):
                 %s
 
-                Generá un análisis de 3-5 oraciones destacando: tendencias, productos destacados, alertas de stock y recomendaciones.
+                Respondé con este JSON exacto:
+                {
+                  "summary": "Resumen ejecutivo de 3-4 oraciones en español con tendencias y productos destacados.",
+                  "recommendations": [
+                    "Recomendación 1 concreta y accionable",
+                    "Recomendación 2 concreta y accionable",
+                    "Recomendación 3 concreta y accionable"
+                  ]
+                }
                 """,
                 days,
                 filteredSales.size(),
@@ -114,6 +126,16 @@ public class AiAnalysisService implements IAiAnalysisService {
             throw new RuntimeException("Groq did not return a valid response");
         }
 
-        return response.choices().get(0).message().content();
+        String content = response.choices().get(0).message().content();
+
+        try {
+            JsonNode json = objectMapper.readTree(content);
+            String summary = json.get("summary").asText();
+            List<String> recommendations = new ArrayList<>();
+            json.get("recommendations").forEach(node -> recommendations.add(node.asText()));
+            return new AnalysisResponseDTO(summary, recommendations);
+        } catch (Exception e) {
+            return new AnalysisResponseDTO(content, List.of());
+        }
     }
 }

@@ -1,2 +1,6 @@
 .env
 .atl/
+LEVMANTAR.md
+.idea/
+target/
+*.class

@@ -1,5 +1,7 @@
 package com.homeappliance_commerce.ai_service.service;
 
+import com.homeappliance_commerce.ai_service.dto.AnalysisResponseDTO;
+
 public interface IAiAnalysisService {
-    String generateAnalysis(String period);
+    AnalysisResponseDTO generateAnalysis(String period);
 }

@@ -19,7 +19,6 @@ public class AiController {
 
     @PostMapping("/analysis")
     public ResponseEntity<AnalysisResponseDTO> generateAnalysis(@RequestBody AnalysisRequestDTO request) {
-        String analysis = aiAnalysisService.generateAnalysis(request.getPeriod());
-        return ResponseEntity.ok(new AnalysisResponseDTO(analysis));
+        return ResponseEntity.ok(aiAnalysisService.generateAnalysis(request.getPeriod()));
     }
 }
