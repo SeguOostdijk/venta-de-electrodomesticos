@@ -40,6 +40,6 @@ export class AdminProductsPage extends BasePage {
   }
 
   async verifyProductInTable(name: string): Promise<void> {
-    await expect(this.page.getByRole('cell', { name })).toBeVisible({ timeout: 5000 })
+    await expect(this.page.getByRole('cell', { name }).first()).toBeVisible({ timeout: 5000 })
   }
 }
