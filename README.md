@@ -1,200 +1,184 @@
-# Comercio de Electrodomésticos – API de Microservicios
+# HomeAppliance Commerce
 
-Sistema de gestión para una tienda online de **electrodomésticos**, desarrollado mediante una **arquitectura de microservicios** utilizando **Spring Cloud**.
+Full-stack e-commerce platform for home appliances built with a **microservices architecture** using **Spring Cloud** and a **React 19** frontend.
 
-El sistema permite consultar productos, gestionar carritos de compra y registrar ventas, proporcionando una experiencia de compra distribuida mediante diferentes servicios que se comunican entre sí.
-
-Este proyecto fue desarrollado como **Trabajo Práctico Integrador Final** del curso **Microservicios con Spring Cloud** de **TodoCode Academy**, con el objetivo de demostrar conocimientos en desarrollo de microservicios, comunicación entre servicios y despliegue mediante Docker.
+The system handles user authentication, product catalog, shopping cart, order management, and AI-powered sales analysis — all orchestrated through an API Gateway with service discovery, centralized configuration, and fault tolerance.
 
 ---
 
-# Arquitectura del sistema
-
-El sistema está compuesto por varios microservicios independientes que colaboran entre sí para ofrecer las funcionalidades del sistema.
-
-Microservicios principales:
-
-### Product Service
-
-Microservicio encargado de administrar los productos disponibles en la tienda.
-Permite consultar los electrodomésticos disponibles junto con su información básica.
-
-### Cart Service
-
-Microservicio encargado de gestionar los carritos de compra.
-Permite agregar y eliminar productos del carrito y calcular el total de la compra.
-
-### Sale Service
-
-Microservicio encargado de registrar las ventas realizadas.
-Cada venta se encuentra asociada a un carrito de compras.
-
-Infraestructura de microservicios:
-
-Eureka Server → Registro y descubrimiento de servicios
-
-API Gateway → Punto de entrada para clientes externos
-
-Config Server → Centralización de configuraciones
-
-Spring Cloud LoadBalancer → Balanceo de carga entre instancias
-
-Resilience4J → Circuit Breaker y Retry para tolerancia a fallos
-
----
-
-# Tecnologías utilizadas
-
-* Java 23
-* Spring Boot
-* Spring Cloud
-* Spring Data JPA
-* Hibernate
-* MySQL
-* Docker
-* Eureka Server
-* API Gateway
-* Config Server
-* Resilience4J
-* OpenAPI / Swagger
-* Postman
-* Maven
-
----
-
-# Estructura del proyecto
+## Architecture
 
 ```
-homeappliance-commerce
-│
-├── api-gateway
-├── config-server
-├── eureka-sv
-│
-├── product-service
-├── cart-service
-├── sale-service
-│
-├── docker-compose.yml
-│
-└── postman
-    ├── product-service_collection.json
-    ├── cart-service_collection.json
-    ├── sale-service_collection.json
+                        ┌─────────────────┐
+                        │   React 19 UI   │  :5173
+                        └────────┬────────┘
+                                 │
+                        ┌────────▼────────┐
+                        │   API Gateway   │  :8080  (JWT validation + routing)
+                        └────────┬────────┘
+                                 │
+          ┌──────────────────────┼──────────────────────┐
+          │                      │                      │
+   ┌──────▼──────┐       ┌───────▼──────┐      ┌───────▼──────┐
+   │auth-service │       │product-serv. │      │ cart-service │
+   │   :8084     │       │    :8081     │      │    :8082     │
+   └─────────────┘       └──────────────┘      └──────────────┘
+          │                      │                      │
+   ┌──────▼──────┐       ┌───────▼──────┐
+   │sale-service │       │  ai-service  │
+   │   :8083     │       │    :8085     │  (Groq LLM)
+   └─────────────┘       └──────────────┘
+          │
+   ┌──────▼──────────────────────────────────┐
+   │              Eureka Server  :8761        │
+   │              Config Server  :8888        │
+   │              MySQL          :3306        │
+   └─────────────────────────────────────────┘
 ```
 
 ---
 
-# Ejecutar la aplicación con Docker
+## Services
 
-### 1. Clonar el repositorio
+| Service | Port | Description |
+|---|---|---|
+| `ui` | 5173 | React 19 frontend — user and admin interfaces |
+| `api-gateway` | 8080 | Entry point — JWT validation, routing, CORS |
+| `auth-service` | 8084 | Registration, login, JWT issuance |
+| `product-service` | 8081 | Product catalog with search and pagination |
+| `cart-service` | 8082 | Shopping cart management |
+| `sale-service` | 8083 | Order placement and history |
+| `ai-service` | 8085 | Sales analysis powered by Groq LLM |
+| `eureka-sv` | 8761 | Service registry and discovery |
+| `config-server` | 8888 | Centralized configuration |
 
-```
-git clone https://github.com/tu-usuario/homeappliance-commerce.git
+---
+
+## Features
+
+**User**
+- Register and login with JWT authentication
+- Browse product catalog with search and pagination
+- Add products to cart, adjust quantities
+- Place orders and view order history
+
+**Admin**
+- Manage products (create, edit, delete)
+- View and manage all sales
+- AI-powered sales analysis via Groq
+
+---
+
+## Tech Stack
+
+**Backend**
+- Java 23 · Spring Boot · Spring Cloud
+- Spring Security · JWT
+- Spring Data JPA · Hibernate · MySQL
+- OpenFeign · Resilience4J (Circuit Breaker + Retry)
+- Eureka · Config Server · API Gateway
+- Spring AI (Groq) · OpenAPI / Swagger
+
+**Frontend**
+- React 19 · TypeScript · Vite
+- Tailwind CSS 4 · shadcn/ui
+- React Router v7 · TanStack Query
+- Axios · Playwright (E2E tests)
+
+**Infrastructure**
+- Docker · Docker Compose
+- Nginx (frontend serving)
+- phpMyAdmin
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Docker and Docker Compose
+- A [Groq API key](https://console.groq.com) (free tier available)
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/SeguOostdijk/venta-de-electrodomesticos.git
 cd homeappliance-commerce
 ```
 
----
+### 2. Configure environment variables
 
-### 2. Construir los contenedores
-
-```
-docker-compose build
+```bash
+cp .env.example .env
 ```
 
----
+Edit `.env` with your values:
 
-### 3. Levantar el sistema
-
+```env
+MYSQL_ROOT_PASSWORD=your_password
+JWT_SECRET=your_jwt_secret_key
+GROQ_API_KEY=your_groq_api_key
 ```
-docker-compose up
+
+### 3. Start the system
+
+```bash
+docker-compose up --build
 ```
 
-Esto iniciará automáticamente:
-
-* MySQL
-* Eureka Server
-* Config Server
-* API Gateway
-* Product Service
-* Cart Service
-* Sale Service
+This starts all services in the correct dependency order with health checks.
 
 ---
 
-# Acceso a los servicios
+## Accessing the Application
 
-### Eureka Dashboard
+| Interface | URL |
+|---|---|
+| Frontend | http://localhost:5173 |
+| API Gateway | http://localhost:8080 |
+| Eureka Dashboard | http://localhost:8761 |
+| phpMyAdmin | http://localhost:8090 |
+
+### Swagger (per service)
+
+| Service | Swagger UI |
+|---|---|
+| product-service | http://localhost:8081/swagger-ui/index.html |
+| cart-service | http://localhost:8082/swagger-ui/index.html |
+| sale-service | http://localhost:8083/swagger-ui/index.html |
+| auth-service | http://localhost:8084/swagger-ui/index.html |
+
+---
+
+## Project Structure
 
 ```
-http://localhost:8761
-```
-
-### API Gateway
-
-```
-http://localhost:8080
+homeappliance-commerce/
+├── api-gateway/
+├── config-server/
+├── eureka-sv/
+├── auth-service/
+├── product-service/
+├── cart-service/
+├── sale-service/
+├── ai-service/
+├── ui/                    # React 19 frontend
+├── config-data/           # Centralized config files
+├── mysql-init/            # DB initialization scripts
+├── postman/               # Postman collections
+└── docker-compose.yml
 ```
 
 ---
 
-# Documentación de la API (Swagger)
+## API Collections
 
-Cada microservicio expone documentación interactiva mediante **Swagger (OpenAPI)**.
+Postman collections for all services are available in `/postman`.
 
-Product Service
-
-```
-http://localhost:8081/swagger-ui/index.html
-```
-
-Cart Service
-
-```
-http://localhost:8082/swagger-ui/index.html
-```
-
-Sale Service
-
-```
-http://localhost:8083/swagger-ui/index.html
-```
-
-Desde Swagger es posible:
-
-* visualizar todos los endpoints disponibles
-* probar peticiones HTTP (GET, POST, PUT, DELETE)
-* revisar los modelos de datos utilizados
+Import any collection and point it to `http://localhost:8080` (API Gateway).
 
 ---
 
-# Probar la API con Postman
+## Author
 
-El repositorio incluye colecciones de Postman para probar los endpoints de cada microservicio.
-
-Pasos:
-
-1. Abrir Postman
-2. Importar las colecciones ubicadas en
-
-```
-/postman
-```
-
-3. Ejecutar las peticiones disponibles en cada colección.
-
----
-
-# Docker
-
-Cada microservicio posee su propio **Dockerfile** y el sistema completo se ejecuta mediante **docker-compose**, lo que permite levantar toda la arquitectura de microservicios con un solo comando.
-
----
-
-# Autor
-
-Segundo Oostdijk - Desarrollador Backend
-
-Proyecto desarrollado para el curso:
-
-**Microservicios con Spring Cloud – TodoCode Academy**
+**Segundo Oostdijk** — [@SeguOostdijk](https://github.com/SeguOostdijk)
