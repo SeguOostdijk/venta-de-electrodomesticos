@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import ReactMarkdown from 'react-markdown'
 import { useGenerateAnalysis } from '../features/ai/hooks/useGenerateAnalysis'
 import { cn } from '../shared/lib/cn'
 

@@ -14,7 +14,7 @@ services:
     networks:
       - homeappliance-commerce-net
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -proot123 || exit 1"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p${MYSQL_ROOT_PASSWORD} || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 2
@@ -68,7 +68,7 @@ services:
     networks:
       - homeappliance-commerce-net
     healthcheck:
-      test: ["CMD-SHELL", "wget --spider -q http://localhost:8081/actuator/health || exit 1"]
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/8081' 2>/dev/null"]
       interval: 10s
       timeout: 5s
       retries: 2
@@ -92,7 +92,7 @@ services:
     networks:
       - homeappliance-commerce-net
     healthcheck:
-      test: ["CMD-SHELL", "wget --spider -q http://localhost:8082/actuator/health || exit 1"]
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/8082' 2>/dev/null"]
       interval: 10s
       timeout: 5s
       retries: 2
@@ -116,7 +116,7 @@ services:
     networks:
       - homeappliance-commerce-net
     healthcheck:
-      test: ["CMD-SHELL", "wget --spider -q http://localhost:8083/actuator/health || exit 1"]
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/8083' 2>/dev/null"]
       interval: 10s
       timeout: 5s
       retries: 2
@@ -163,7 +163,7 @@ services:
     networks:
       - homeappliance-commerce-net
     healthcheck:
-      test: ["CMD-SHELL", "wget --spider -q http://localhost:8085/actuator/health || exit 1"]
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/8085' 2>/dev/null"]
       interval: 10s
       timeout: 5s
       retries: 2
@@ -185,12 +185,23 @@ services:
     networks:
       - homeappliance-commerce-net
     healthcheck:
-      test: ["CMD-SHELL", "wget --spider -q http://localhost:8080/actuator/health || exit 1"]
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/8080' 2>/dev/null"]
       interval: 10s
       timeout: 5s
       retries: 2
       start_period: 50s
     restart: on-failure
+
+  ui:
+    build: ui
+    container_name: ui
+    ports:
+      - "5173:80"
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    networks:
+      - homeappliance-commerce-net
 
   phpmyadmin:
     image: phpmyadmin:latest

@@ -1,8 +1,10 @@
 import axios from 'axios'
 import { tokenStore } from './tokenStore'
 
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080'
+
 export const api = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: API_URL,
   headers: { 'Content-Type': 'application/json' },
 })
 
@@ -50,7 +52,7 @@ api.interceptors.response.use(
       const refreshToken = tokenStore.getRefresh()
       if (!refreshToken) throw new Error('No refresh token')
 
-      const { data } = await axios.post('http://localhost:8080/api/auth/refresh', { refreshToken })
+      const { data } = await axios.post(`${API_URL}/api/auth/refresh`, { refreshToken })
       const tokens = data.data
       tokenStore.setAccess(tokens.accessToken)
       if (tokens.refreshToken) tokenStore.setRefresh(tokens.refreshToken)
